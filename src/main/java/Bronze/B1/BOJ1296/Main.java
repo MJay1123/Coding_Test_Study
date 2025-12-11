@@ -39,9 +39,7 @@ public class Main {
             }
         }
         Collections.sort(list);
-        for(int i=0; i<list.size(); i++){
-            bw.write(list.get(i) + "\n");
-        }
+        bw.write(list.get(0));
         bw.flush();
     }
     public static int calculate(){
