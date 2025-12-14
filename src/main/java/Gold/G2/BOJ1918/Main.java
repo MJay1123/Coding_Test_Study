@@ -7,64 +7,85 @@ public class Main {
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
-        StringBuilder sb = new StringBuilder();
         String equation = br.readLine();
-        bw.write(change(equationToList(equation)));
+        int bracketCount = 0;
+        for(int i=0; i<equation.length(); i++){
+            if(equation.charAt(i) == '('){
+                bracketCount++;
+            }
+        }
+        String[][] arr = new String[bracketCount+1][equation.length()];
+        int index = 0;
+        for(int i=0; i<equation.length(); i++){
+            char ch = equation.charAt(i);
+            if(ch == '('){
+                index++;
+                arr[index][i] = ch + "";
+            } else if(ch == ')') {
+                arr[index][i] = ch + "";
+                index--;
+            } else {
+                arr[index][i] = ch + "";
+            }
+        }
+        for(int r=bracketCount; r>0; r--){
+            List<Integer> leftList = new ArrayList<>();
+            List<Integer> rightList = new ArrayList<>();
+            for(int c=0; c<equation.length(); c++){
+                if(arr[r][c] == null){
+                    continue;
+                }
+                if(arr[r][c].equals("(")) {
+                    leftList.add(c);
+                }
+                if(arr[r][c].equals(")")){
+                    rightList.add(c);
+                }
+            }
+            for(int i=0; i<leftList.size(); i++){
+                int left = leftList.get(i);
+                int right = rightList.get(i);
+                String[] temp = new String[right-left-1];
+                for(int j=0; j<temp.length; j++){
+                    temp[j] = arr[r][left+1+j];
+                }
+                String result = change(temp);
+                arr[r-1][left] = result;
+            }
+        }
+        bw.write(change(arr[0]));
         bw.flush();
     }
 
-    public static List<String> equationToList(String str){
-        Stack<String> stack = new Stack<>();
-        List<String> result = new ArrayList<>();
-        for(int i=0; i<str.length(); i++){
-            char ch = str.charAt(i);
-            if(ch == '('){
-                stack.push(ch + "");
-            } else if(ch == ')'){
-                List<String> temp = new ArrayList<>();
-                while(true){
-                    String s = stack.pop();
-                    if(s.equals("(")){
-                        break;
-                    }
-                    temp.add(0, s);
-                }
-                result.add(change(temp));
-            } else {
-                if(stack.isEmpty()) {
-                    result.add(ch + "");
-                } else {
-                    stack.push(ch + "");
-                }
-            }
-
-        }
-        return result;
-    }
-    public static String change(List<String> list){
+    public static String change(String[] arr){
         List<String> numList = new LinkedList<>();
         List<String> calcList = new LinkedList<>();
-        for(int i=0; i<list.size(); i++){
-            String s = list.get(i);
+        for(int i=0; i<arr.length; i++){
+            String s = arr[i];
+            if(s == null){
+                continue;
+            }
             if(s.equals("+") || s.equals("-")){
                 calcList.add(s);
             } else if(s.equals("*") || s.equals("/")){
-                String calc = s;
                 i++;
-                String num2 = list.get(i);
+                while(arr[i] == null){
+                    i++;
+                }
+                String num2 = arr[i];
                 String num1 = numList.get(numList.size()-1);
-                String result = num1 + num2 + calc;
+                String result = num1 + num2 + s;
                 numList.set(numList.size()-1, result);
             } else {
                 numList.add(s);
             }
         }
-        String result = "";
-        result += numList.get(0);
+        StringBuilder sb = new StringBuilder();
+        sb.append(numList.get(0));
         for(int i=0; i<calcList.size(); i++){
-            result += numList.get(i+1);
-            result += calcList.get(i);
+            sb.append(numList.get(i+1));
+            sb.append(calcList.get(i));
         }
-        return result;
+        return sb.toString();
     }
 }
