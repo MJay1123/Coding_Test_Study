@@ -1,0 +1,43 @@
+2차원 행렬 arr1과 arr2를 입력받아, arr1에 arr2를 곱한 결과를 반환하는 함수, solution을 완성해주세요.
+
+제한 조건
+행렬 arr1, arr2의 행과 열의 길이는 2 이상 100 이하입니다.
+행렬 arr1, arr2의 원소는 -10 이상 20 이하인 자연수입니다.
+곱할 수 있는 배열만 주어집니다.
+--------------------------------------------------------------------------------------------------------
+import java.util.*;
+class Solution {
+    public int[][] solution(int[][] arr1, int[][] arr2) {
+        int[][] answer = new int[arr1.length][arr2[0].length];
+
+        for(int i=0; i<arr1.length; i++){
+            for(int j=0; j<arr2[0].length; j++){
+                answer[i][j] = calculate(getRow(arr1, i), getColumn(arr2, j));
+            }
+        }
+        return answer;
+    }
+    
+    public static int calculate(int[] arr1, int[] arr2){
+        int sum = 0;
+        if(arr1.length != arr2.length){
+            return -1;
+        }
+        for(int i=0; i<arr1.length; i++){
+            sum += arr1[i]*arr2[i];
+        }
+        return sum;
+    }
+    
+    public static int[] getColumn(int[][] arr2, int c){
+        int[] column = new int[arr2.length];
+        for(int i=0; i<column.length; i++){
+            column[i] = arr2[i][c];
+        }
+        return column;
+    }
+        
+    public static int[] getRow(int[][] arr1, int r){
+        return arr1[r];
+    }
+}

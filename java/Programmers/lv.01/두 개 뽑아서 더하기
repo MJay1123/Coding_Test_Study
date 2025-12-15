@@ -1,0 +1,67 @@
+정수 배열 numbers가 주어집니다. numbers에서 서로 다른 인덱스에 있는 두 개의 수를 뽑아 더해서 만들 수 있는 모든 수를 배열에 오름차순으로 담아 return 하도록 solution 함수를 완성해주세요.
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+import java.util.*;
+class Solution {
+    public int[] solution(int[] numbers) {
+        HashSet<Integer> hs = new HashSet<>();
+        for(int i=0; i<numbers.length-1; i++){
+            for(int j=i+1; j<numbers.length; j++){
+                hs.add(numbers[i]+numbers[j]);
+            }
+        } // HashSet에 중복값 제거해서 넣기
+        
+        int[] answer = new int[hs.size()];
+        List<Integer> list = new ArrayList<>();
+        Iterator it = hs.iterator();
+        while(it.hasNext()){
+            list.add((int)it.next());
+        } // Iterator를 이용하여 HashSet -> List
+        for(int i=0; i<answer.length; i++){
+            answer[i] = list.get(i);
+        } // List -> Array
+        Arrays.sort(answer);
+        return answer;
+    }
+}
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+import java.util.*;
+class Solution {
+    static List<Integer> list = new ArrayList<>();
+    
+    public int[] solution(int[] numbers) {
+        boolean[] visited = new boolean[numbers.length];
+        combination(numbers, visited, 0, 0, 2);
+        Collections.sort(list);
+        
+        int[] answer = new int[list.size()];
+        for(int i=0; i<answer.length; i++){
+            answer[i] = list.get(i);
+        }
+        return answer;
+    }
+    
+    public static void combination(int[] numbers, boolean[] visited, int index, int depth, int count){
+        
+        if(depth == count){
+            int sum = 0;
+            for(int i=0; i<visited.length; i++){
+                if(visited[i]){
+                    sum += numbers[i];
+                }
+            }
+            if(!list.contains(sum)){
+                list.add(sum);
+            }
+            return;
+        }
+        if(index == numbers.length){
+            return;
+        }
+        
+        visited[index] = true;
+        combination(numbers, visited, index+1, depth+1, count);
+        
+        visited[index] = false;
+        combination(numbers, visited, index+1, depth, count);
+    }
+}

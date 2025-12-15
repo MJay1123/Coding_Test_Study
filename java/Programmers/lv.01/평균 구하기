@@ -1,0 +1,32 @@
+정수를 담고 있는 배열 arr의 평균값을 return하는 함수, solution을 완성해보세요.
+------------------------------------------------------------------------------------------
+import java.util.*;
+class Solution {
+    public double solution(int[] arr) {
+        double answer = 0;
+        List<Integer> list = new ArrayList<>();
+        for (int i=0; i<arr.length; i++){
+            list.add(arr[i]);
+        }
+        Iterator it = list.iterator();
+        int sum = 0;
+        while(it.hasNext()){
+            sum = sum + (int)it.next();
+        }
+        System.out.println(sum);
+        System.out.println(list.size());
+        answer = (double) sum / list.size();
+        return answer;
+    }
+}
+-----------------------------------------------------------------------------------------------------------------------
+class Solution {
+    public double solution(int[] arr) {
+        double answer = 0;
+        for(int i=0; i<arr.length; i++){
+            answer += arr[i];
+        }
+        answer /= arr.length;
+        return answer;
+    }
+}

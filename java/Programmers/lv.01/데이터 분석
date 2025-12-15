@@ -1,0 +1,168 @@
+AI 엔지니어인 현식이는 데이터를 분석하는 작업을 진행하고 있습니다. 데이터는 ["코드 번호(code)", "제조일(date)", "최대 수량(maximum)", "현재 수량(remain)"]으로 구성되어 있으며 현식이는 이 데이터들 중 조건을 만족하는 데이터만 뽑아서 정렬하려 합니다.
+
+예를 들어 다음과 같이 데이터가 주어진다면
+
+data = [[1, 20300104, 100, 80], [2, 20300804, 847, 37], [3, 20300401, 10, 8]]
+이 데이터는 다음 표처럼 나타낼 수 있습니다.
+
+code	date	maximum	remain
+1	20300104	100	80
+2	20300804	847	37
+3	20300401	10	8
+주어진 데이터 중 "제조일이 20300501 이전인 물건들을 현재 수량이 적은 순서"로 정렬해야 한다면 조건에 맞게 가공된 데이터는 다음과 같습니다.
+
+data = [[3,20300401,10,8],[1,20300104,100,80]]
+정렬한 데이터들이 담긴 이차원 정수 리스트 data와 어떤 정보를 기준으로 데이터를 뽑아낼지를 의미하는 문자열 ext, 뽑아낼 정보의 기준값을 나타내는 정수 val_ext, 정보를 정렬할 기준이 되는 문자열 sort_by가 주어집니다.
+
+data에서 ext 값이 val_ext보다 작은 데이터만 뽑은 후, sort_by에 해당하는 값을 기준으로 오름차순으로 정렬하여 return 하도록 solution 함수를 완성해 주세요. 단, 조건을 만족하는 데이터는 항상 한 개 이상 존재합니다.
+--------------------------------------------------
+import java.util.Arrays;
+class Solution {
+    public int[][] solution(int[][] data, String ext, int val_ext, String sort_by) {
+        int[][] answer = new int[data.length][data[0].length];
+        int compareX = -1;
+        int lengthY = 0;
+        int x=0;
+        int y=0;
+        int l = 0;
+        // data에서 ext값이 val_ext보다 작은 데이터 sort_by로 오름차순 정렬
+
+        if(ext.equals("code")){
+            compareX = 0;
+        } else if(ext.equals("date")){
+            compareX = 1;
+        } else if(ext.equals("maximum")){
+            compareX = 2;
+        } else if(ext.equals("remain")){
+            compareX = 3;
+        }
+
+        switch(ext){
+            case "code":
+                compareX = 0;
+                break;
+            case "date":
+        }
+
+        for(int i=0; i<data.length; i++){
+            if(data[i][compareX] < val_ext){
+                lengthY++;
+            }
+        } // data 개수 정하기
+
+        int[] list = new int[lengthY];
+
+        for(int i=0; i<data.length; i++){
+            if(data[i][compareX] < val_ext){
+                list[l] = i;
+                l++;
+            }
+        } // date index 추출
+        for(int i=0; i<list.length; i++){
+            System.out.println(list[i]);
+        }
+  
+        int[][] result = new int[lengthY][data[0].length];
+        int[][] result2 = new int[lengthY][data[0].length];
+
+        for(y=0; y<lengthY; y++){
+            for(x=0; x<data[0].length; x++){
+                result[y][x] = data[list[y]][x];
+            }
+        } // result[][]에 date 옮기기
+
+        if(sort_by.equals("code")){
+            compareX = 0;
+        } else if(sort_by.equals("date")){
+            compareX = 1;
+        } else if(sort_by.equals("maximum")){
+            compareX = 2;
+        } else if(sort_by.equals("remain")){
+            compareX = 3;
+        }
+        
+        for(int i=0; i<list.length; i++){
+            list[i] = result[i][compareX];
+        } // sort_by값으로 list 작성
+        
+        Arrays.sort(list);
+
+        for(int i=0; i<list.length; i++){
+            for(int j=0; j<result.length; j++){
+                if(result[j][compareX] == list[i]){
+                    for(int k=0; k<result[0].length; k++){
+                        result2[i][k] = result[j][k];
+                    }
+                }
+            }
+        }
+        return result2;
+    }
+}
+---------------------------------------------------------
+import java.util.Arrays;
+import java.util.List;
+
+public class p10 {
+    public static void main(String[] args) {
+        int[][] data = {{1, 20300104, 100, 80}, {2, 20300804, 847, 37}, {3, 20300401, 10, 8}};
+        String ext = "date";
+        int val_ext = 20300501;
+        String sort_by = "remain";
+
+        int[][] result = p10.solution(data, ext, val_ext, sort_by);
+        for(int[] intArr : result) {
+            System.out.println(Arrays.toString(intArr));
+        }
+    }
+
+    public static int[][] solution(int[][] data, String ext, int val_ext, String sort_by) {
+        List<String> column = List.of("code", "date", "maximum", "remain");
+
+        int extIdx = column.indexOf(ext);
+        int sortIdx = column.indexOf(sort_by);
+
+        return Arrays.stream(data)
+            .filter(e -> e[extIdx] < val_ext)
+            .sorted((a, b) -> Integer.compare(a[sortIdx], b[sortIdx]))
+            .toArray(int[][]::new);
+    }
+}
+-------------------------------------------------------
+import java.util.*;
+
+class Solution {
+    public int[][] solution(int[][] data, String ext, int val_ext, String sort_by) {
+        // 필터링할 인덱스를 결정
+        int extIndex = getIndex(ext);
+        int sortIndex = getIndex(sort_by);
+
+        // 필터링된 데이터를 저장할 리스트
+        List<int[]> filteredList = new ArrayList<>();
+        
+        // 조건에 따라 필터링
+        for (int[] row : data) {
+            if (row[extIndex] < val_ext) {
+                filteredList.add(row);
+            }
+        }
+
+        // 정렬
+        filteredList.sort((o1, o2) -> Integer.compare(o1[sortIndex], o2[sortIndex]));
+
+        // 리스트를 배열로 변환
+        int[][] answer = filteredList.toArray(new int[0][]);
+        return answer;
+    }
+
+    // 문자열 필드명을 해당 인덱스로 변환
+    private int getIndex(String field) {
+        switch (field) {
+            case "code": return 0;
+            case "date": return 1;
+            case "maximum": return 2;
+            case "remain": return 3;
+            default: throw new IllegalArgumentException("Invalid field: " + field);
+        }
+    }
+}

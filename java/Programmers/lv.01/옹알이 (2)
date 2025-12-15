@@ -1,0 +1,60 @@
+머쓱이는 태어난 지 11개월 된 조카를 돌보고 있습니다. 조카는 아직 "aya", "ye", "woo", "ma" 네 가지 발음과 네 가지 발음을 조합해서 만들 수 있는 발음밖에 하지 못하고 연속해서 같은 발음을 하는 것을 어려워합니다.
+문자열 배열 babbling이 매개변수로 주어질 때, 머쓱이의 조카가 발음할 수 있는 단어의 개수를 return하도록 solution 함수를 완성해주세요.
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+import java.util.*;
+class Solution {
+    public int solution(String[] babbling) {
+        int answer = 0;
+        
+        for(int i=0; i<babbling.length; i++){
+            babbling[i] = changeNum(babbling[i]);
+        }
+        for(int i=0; i<babbling.length; i++){
+            if(notNum(babbling[i]) & sameNum(babbling[i])){
+                answer++;
+            }
+        }
+        return answer;
+    }
+    
+    private static String changeNum(String str){ // 발음 가능 단어를 숫자로 단순화
+        str = str.replaceAll("aya","1");
+        str = str.replaceAll("ye","2");
+        str = str.replaceAll("woo","3");
+        str = str.replaceAll("ma","4");
+        return str;
+    }
+    
+    private static boolean notNum(String str){
+        String[] array = str.split("");
+        HashSet<String> hs = new HashSet<>();
+        for(int i=0; i<array.length; i++){
+            hs.add(array[i]);
+        }
+        hs.remove("1");
+        hs.remove("2");
+        hs.remove("3");
+        hs.remove("4");
+        
+        if(hs.size()>0){
+            return false;
+        }
+        return true;
+    }
+    
+    private static boolean sameNum(String str){ // 연속으로 같은 발음 X
+        if(str.indexOf("11")>=0){
+            return false;
+        }
+        if(str.indexOf("22")>=0){
+            return false;
+        }
+        if(str.indexOf("33")>=0){
+            return false;
+        }
+        if(str.indexOf("44")>=0){
+            return false;
+        }
+        return true;
+    }
+}

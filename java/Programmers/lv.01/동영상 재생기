@@ -1,0 +1,107 @@
+당신은 동영상 재생기를 만들고 있습니다. 당신의 동영상 재생기는 10초 전으로 이동, 10초 후로 이동, 오프닝 건너뛰기 3가지 기능을 지원합니다. 각 기능이 수행하는 작업은 다음과 같습니다.
+
+10초 전으로 이동: 사용자가 "prev" 명령을 입력할 경우 동영상의 재생 위치를 현재 위치에서 10초 전으로 이동합니다. 현재 위치가 10초 미만인 경우 영상의 처음 위치로 이동합니다. 영상의 처음 위치는 0분 0초입니다.
+10초 후로 이동: 사용자가 "next" 명령을 입력할 경우 동영상의 재생 위치를 현재 위치에서 10초 후로 이동합니다. 동영상의 남은 시간이 10초 미만일 경우 영상의 마지막 위치로 이동합니다. 영상의 마지막 위치는 동영상의 길이와 같습니다.
+오프닝 건너뛰기: 현재 재생 위치가 오프닝 구간(op_start ≤ 현재 재생 위치 ≤ op_end)인 경우 자동으로 오프닝이 끝나는 위치로 이동합니다.
+동영상의 길이를 나타내는 문자열 video_len, 기능이 수행되기 직전의 재생위치를 나타내는 문자열 pos, 오프닝 시작 시각을 나타내는 문자열 op_start, 오프닝이 끝나는 시각을 나타내는 문자열 op_end, 사용자의 입력을 나타내는 1차원 문자열 배열 commands가 매개변수로 주어집니다. 이때 사용자의 입력이 모두 끝난 후 동영상의 위치를 "mm:ss" 형식으로 return 하도록 solution 함수를 완성해 주세요.
+----------------------------------------------------------------------------
+class Solution {
+    public String solution(String video_len, String pos, String op_start, String op_end, String[] commands) {
+       
+        int videoMin = Integer.parseInt(video_len.substring(0,2));
+        int videoSec = Integer.parseInt(video_len.substring(3,5));
+        int videoTime = videoMin*60 + videoSec;
+        int posMin = Integer.parseInt(pos.substring(0,2));
+        int posSec = Integer.parseInt(pos.substring(3,5));
+        int posTime = posMin*60 + posSec;
+        int opStartMin = Integer.parseInt(op_start.substring(0,2));
+        int opStartSec = Integer.parseInt(op_start.substring(3,5));
+        int opStartTime = opStartMin*60 + opStartSec;
+        int opEndMin = Integer.parseInt(op_end.substring(0,2));
+        int opEndSec = Integer.parseInt(op_end.substring(3,5));
+        int opEndTime = opEndMin*60 + opEndSec;
+        
+        int i = 0;
+        
+        for(i=0; i<commands.length; i++){
+            if(posTime>=opStartTime & posTime<=opEndTime){
+            posTime = opEndTime;
+            }
+            if(commands[i].equals("prev")){
+                if(posTime - 10 < 0){
+                    posTime = 0;
+                } else {
+                    posTime -= 10;
+                }
+            } else if(commands[i].equals("next")){
+                if(posTime + 10 > videoTime){
+                    posTime = videoTime;
+                } else {
+                    posTime += 10;
+                }
+            }
+        }
+        if(posTime>=opStartTime & posTime<=opEndTime){
+            posTime = opEndTime;
+        }
+        int minmin = posTime / 60;
+        int secsec = posTime % 60;
+        String result = String.format("%02d:%02d", minmin,secsec);
+        return result;
+    }
+}
+------------------------------------------------------------------------------
+import java.util.*;
+class Solution {
+    public String solution(String video_len, String pos, String op_start, String op_end, String[] commands) {
+        String answer = "";
+        
+        int videoTime = getTime(video_len);
+        int posTime = getTime(pos);
+        int startTime = getTime(op_start);
+        int endTime = getTime(op_end);
+        
+        for(int i=0; i<commands.length; i++){
+            posTime = setTime(videoTime, posTime, startTime, endTime);
+            posTime = moveTime(posTime, commands[i]);
+            posTime = setTime(videoTime, posTime, startTime, endTime);
+        }
+        int min = posTime / 60;
+        int sec = posTime % 60;
+        answer = String.format("%02d:%02d", min, sec);
+        return answer;
+    }
+    
+    private static int getTime(String str){
+        String[] a = str.split(":");
+        int min = Integer.parseInt(a[0]);
+        int sec = Integer.parseInt(a[1]);
+        int time = min*60 + sec;
+        return time;
+    }
+        
+    private static int moveTime(int time, String str){
+        switch(str){
+            case "prev" :
+                time -= 10;
+                break;
+            case "next" :
+                time += 10;
+                break;
+        }
+        return time;
+    }
+        
+    private static int setTime(int videoTime, int posTime, int startTime, int endTime){
+        if(posTime < 0){
+            posTime = 0;
+        }
+        if(posTime > videoTime){
+            posTime = videoTime;
+        }
+        if(posTime >= startTime & posTime <= endTime){
+            posTime = endTime;
+        }
+        return posTime;
+    }
+}

@@ -1,0 +1,35 @@
+첫 번째 분수의 분자와 분모를 뜻하는 numer1, denom1, 두 번째 분수의 분자와 분모를 뜻하는 numer2, denom2가 매개변수로 주어집니다.
+두 분수를 더한 값을 기약 분수로 나타냈을 때 분자와 분모를 순서대로 담은 배열을 return 하도록 solution 함수를 완성해보세요.
+----------------------------------------------------------------------------------------------------------------------------
+class Solution {
+    public int[] solution(int numer1, int denom1, int numer2, int denom2) {
+        int[] answer = new int[2];
+        int a = denom1;
+        int b = denom2;
+        numer1 *= b;
+        denom1 *= b;
+        numer2 *= a;
+        denom2 *= a; // 일단 통분
+        
+        int numer = numer1 + numer2; // 분자 더하기
+        int denom = denom1; // 분모 선언(필요없긴 함 ㅋ)
+        System.out.println(numer);
+        System.out.println(denom);
+        
+        for(int i=2; i<=denom; i++){
+            if(denom < i){
+                break; // 약수가 없다면 break
+            }
+            if(numer % i == 0 & denom % i == 0){ // 2부터 하나씩 전부 나눠보기
+                numer /= i;
+                denom /= i;
+                i = 1;
+            }
+        }
+        
+        answer[0] = numer;
+        answer[1] = denom;
+        
+        return answer;
+    }
+}

@@ -1,0 +1,71 @@
+정수 n이 매개변수로 주어집니다.
+다음 그림과 같이 밑변의 길이와 높이가 n인 삼각형에서 맨 위 꼭짓점부터 반시계 방향으로 달팽이 채우기를 진행한 후, 첫 행부터 마지막 행까지 모두 순서대로 합친 새로운 배열을 return 하도록 solution 함수를 완성해주세요.
+
+examples.png
+
+제한사항
+n은 1 이상 1,000 이하입니다.
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+import java.util.*;
+class Solution {
+    static int number = 0;
+    static int r = -1;
+    static int c = 0;
+    public int[] solution(int n) {
+        int[][] snail = new int[n][n];
+        int direction = 1;
+        int num = n;
+        while(true){
+            if(direction == 1){
+                direction1(snail, num);
+                num--;
+                direction = 2;
+            } else if(direction == 2){
+                direction2(snail, num);
+                num--;
+                direction = 3;
+            } else if(direction == 3){
+                direction3(snail, num);
+                num--;
+                direction = 1;
+            }
+            if(num == 0){
+                break;
+            }
+        }
+        List<Integer> list = new ArrayList<>();
+        for(int i=0; i<n; i++){
+            for(int j=0; j<i+1; j++){
+                list.add(snail[i][j]);
+            }
+        }
+        int[] answer = new int[list.size()];
+        for(int i=0; i<list.size(); i++){
+            answer[i] = list.get(i);
+        }
+        return answer;
+    }
+    
+    public void direction1(int[][] snail, int count){
+        for(int i=0; i<count; i++){
+            r++;
+            number++;
+            snail[r][c] = number;
+        }
+    }
+    public void direction2(int[][] snail, int count){
+        for(int i=0; i<count; i++){
+            c++;
+            number++;
+            snail[r][c] = number;
+        }
+    }
+    public void direction3(int[][] snail, int count){
+        for(int i=0; i<count; i++){
+            r--;
+            c--;
+            number++;
+            snail[r][c] = number;
+        }
+    }
+}

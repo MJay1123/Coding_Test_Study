@@ -1,0 +1,46 @@
+1부터 입력받은 숫자 n 사이에 있는 소수의 개수를 반환하는 함수, solution을 만들어 보세요.
+
+소수는 1과 자기 자신으로만 나누어지는 수를 의미합니다.
+(1은 소수가 아닙니다.)
+------------------------------------------------------------------------------------------
+// 에라토스테네스의 체
+class Solution {
+    public int solution(int n) {
+        int answer = 0;
+        boolean[] array = new boolean[n+1];
+        array[0] = true;
+        array[1] = true;
+        int limit = (int)Math.sqrt(n);
+        
+        for(int i=2; i<=limit; i++){
+            if(array[i] == false){
+                for(int j=2; j*i<array.length; j++){
+                    array[j*i] = true;
+                }
+            }
+        }
+        
+        for(int i=2; i<array.length; i++){
+            if(array[i] == false){
+                answer++;
+            }
+        }
+        return answer;
+    }
+}
+------------------------------------------------------------------------------------------
+class Solution {
+    public int solution(int n) {
+        int answer = 0;
+        boolean[] numbers = new boolean[n+1];
+        for(int i = 2 ; i <= n ; i++){
+            if(!numbers[i]){
+                answer++;
+                for(int j = i*2 ; j <= n ; j = j+i){
+                    numbers[j] = true;
+                }
+            }
+        }
+        return answer;
+    }
+}

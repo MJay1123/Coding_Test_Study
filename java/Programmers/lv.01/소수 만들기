@@ -1,0 +1,72 @@
+주어진 숫자 중 3개의 수를 더했을 때 소수가 되는 경우의 개수를 구하려고 합니다.
+숫자들이 들어있는 배열 nums가 매개변수로 주어질 때, nums에 있는 숫자들 중 서로 다른 3개를 골라 더했을 때 소수가 되는 경우의 개수를 return 하도록 solution 함수를 완성해주세요.
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+class Solution {
+    public int solution(int[] nums) {
+        int a = nums.length;
+        int answer = a*(a-1)*(a-2)/6;
+        
+        for(int x=0; x<=nums.length-3; x++){
+            for(int y=x+1; y<=nums.length-2; y++){
+                for(int z=y+1; z<=nums.length-1; z++){
+                    int k = nums[x] + nums[y] + nums[z];
+                    for(int i=2; i<=k-1; i++){
+                        if(k%i == 0){
+                            answer--;
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+        return answer;
+    }
+}
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+import java.util.*;
+
+class Solution {
+    
+    static boolean[] sosu = new boolean[3001]; // 0~3000의 소수 여부용 boolean 배열
+    
+    public int solution(int[] nums) {
+        
+        checkNumber(sosu);
+        
+        Arrays.sort(nums);
+        
+        List<Integer> numberList = sumNumber(nums);
+        
+        int answer = 0;
+        for(int i=0; i<numberList.size(); i++){
+            if(sosu[numberList.get(i)] == false){
+                answer++;
+            }
+        }
+        
+        return answer;
+    }
+    
+    public static void checkNumber(boolean[] array){
+        for(int i=2; i<=array.length-1; i++){
+            if(array[i] == false){
+                for(int j=2; i*j<array.length; j++){
+                    array[i*j] = true;
+                }
+            }
+        }    
+    }
+    
+    public static List<Integer> sumNumber(int[] numbers){
+        List<Integer> list = new ArrayList<>();
+        for(int x=0; x<=numbers.length-3; x++){
+            for(int y=x+1; y<=numbers.length-2; y++){
+                for(int z=y+1; z<=numbers.length-1; z++){
+                    int k = numbers[x] + numbers[y] + numbers[z];
+                    list.add(k);
+                }
+            }
+        }
+        return list;
+    }
+}
