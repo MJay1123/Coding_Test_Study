@@ -2,62 +2,39 @@ import java.util.*;
 class Solution {
     public int solution(int n, int w, int num) {
         int answer = 0;
-        int[][] array = makeArray(n, w);
-        
-        array = reverseArray(array);
-        
-        int[] index = getIndex(num, array);
-        for(int i=0; i<=index[0]; i++){
-            if(array[i][index[1]] != 0){
-                answer++;
+        int h = (n-1) / w + 1;
+        int[][] array = new int[h][w];
+        int number = 1;
+        int numR = 0;
+        int numC = 0;
+        for(int i=1; i<=h; i++){
+            int r = h-i;
+            if(i % 2 == 1){     // 정방향
+                for(int c=0; c<w; c++){
+                    array[r][c] = number;
+                    if(number == num){
+                        numR = r;
+                        numC = c;
+                    }
+                    number++;
+                }
+            } else {            // 역방향
+                for(int c=w-1; c>=0; c--){
+                    array[r][c] = number;
+                    if(number == num){
+                        numR = r;
+                        numC = c;
+                    }
+                    number++;
+                }
             }
         }
-        
+        for(int r=0; r<=numR; r++){
+            if(array[r][numC] > n){
+                continue;
+            }
+            answer++;
+        }
         return answer;
-    }
-    
-    public static int[] getIndex(int num, int[][] array){
-        for(int i=0; i<array.length; i++){
-            for(int j=0; j<array[0].length; j++){
-                if(num == array[i][j]){
-                    int[] location = new int[2];
-                    location[0] = i;
-                    location[1] = j;
-                    return location;
-                }
-            }
-        }
-        return null;
-    }
-    
-    
-    public static int[][] reverseArray(int[][] array){
-        for(int i=0; i<array.length; i++){
-            if(i%2 == 0){
-                int[] temp = new int[array[i].length];
-                for(int j=0; j<temp.length; j++){
-                    temp[j] = array[i][array[i].length-1-j];
-                }
-                for(int j=0; j<temp.length; j++){
-                    array[i][j] = temp[j];
-                }
-            }
-        }
-        return array;
-    }
-    
-    public static int[][] makeArray(int n, int w){
-        int[][] array = new int[(n/w)+1][w];
-        int x = 1;
-        for(int i=array.length-1; i>=0; i--){
-            for(int j=0; j<array[0].length; j++){
-                array[i][j] = x;
-                x++;
-                if(x > n){
-                    return array;
-                }
-            }
-        }
-        return array;
     }
 }
