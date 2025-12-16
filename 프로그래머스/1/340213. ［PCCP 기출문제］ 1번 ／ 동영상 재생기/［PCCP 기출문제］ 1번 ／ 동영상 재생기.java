@@ -28,24 +28,9 @@ class Solution {
     }
     
     public String numberToTime(int number){
-        String result = "";
         int minute = number / 60;
-        if(minute >= 10){
-            result += minute;
-        } else if(minute > 0){
-            result += "0" + minute;
-        } else {
-            result += "00";
-        }
-        result += ":";
         int second = number % 60;
-        if(second >= 10){
-            result += second;
-        } else if(second > 0){
-            result += "0" + second;
-        } else {
-            result += "00";
-        }
+        String result = String.format("%02d:%02d", minute, second);
         return result;
     }
     
