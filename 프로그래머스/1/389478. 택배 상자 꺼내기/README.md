@@ -1,10 +1,10 @@
 # [level 1] 택배 상자 꺼내기 - 389478 
 
-[문제 링크](https://school.programmers.co.kr/learn/courses/30/lessons/389478?language=java) 
+[문제 링크](https://school.programmers.co.kr/learn/courses/30/lessons/389478?language=python3) 
 
 ### 성능 요약
 
-메모리: 94.8 MB, 시간: 0.05 ms
+메모리: 9.22 MB, 시간: 0.05 ms
 
 ### 구분
 
@@ -16,7 +16,7 @@
 
 ### 제출 일자
 
-2025년 12월 16일 16:30:55
+2025년 12월 16일 16:38:16
 
 ### 문제 설명
 
