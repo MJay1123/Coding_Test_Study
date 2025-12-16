@@ -32,6 +32,5 @@ def solution(data, ext, val_ext, sort_by):
             if data[indexList[j]][index] == sortList[i] :
                 for k in range(len(data[0])) :
                     answer[i][k] = data[indexList[j]][k]
-# answer = [[0] * len(data[0]) for _ in range(len(list))]
 
     return answer
