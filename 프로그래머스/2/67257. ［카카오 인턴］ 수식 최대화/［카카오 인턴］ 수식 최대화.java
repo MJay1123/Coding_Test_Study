@@ -18,14 +18,8 @@ class Solution {
             }
         }
         for(int c=0; c<6; c++){
-            numberList.clear();
-            for(int i=0; i<firstNumberList.size(); i++){
-                numberList.add(firstNumberList.get(i));
-            }
-            calcList.clear();
-            for(int i=0; i<firstCalcList.size(); i++){
-                calcList.add(firstCalcList.get(i));
-            }
+            numberList = firstNumberList;
+            calcList = firstCalcList;
             for(int depth = 0; depth<3; depth++){
                 char priorityCalculation = calculation[priority[c][depth]];
                 process(priorityCalculation, depth);
