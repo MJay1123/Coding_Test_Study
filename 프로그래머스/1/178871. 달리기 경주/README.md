@@ -1,10 +1,10 @@
 # [level 1] 달리기 경주 - 178871 
 
-[문제 링크](https://school.programmers.co.kr/learn/courses/30/lessons/178871) 
+[문제 링크](https://school.programmers.co.kr/learn/courses/30/lessons/178871?language=python3) 
 
 ### 성능 요약
 
-메모리: 379 MB, 시간: 710.67 ms
+메모리: 89 MB, 시간: 963.19 ms
 
 ### 구분
 
@@ -16,7 +16,7 @@
 
 ### 제출 일자
 
-2025년 12월 19일 14:23:00
+2025년 12월 19일 14:27:10
 
 ### 문제 설명
 
