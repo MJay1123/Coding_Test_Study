@@ -1,12 +1,12 @@
 import math
 def solution(numbers):
-    isPrime = [True] * 10000000
-    isPrime[0] = isPrime[1] = False
-    for i in range(int(math.sqrt(10000000))):
-        if isPrime[i]:
+    isPrime = [False] * int(math.pow(10, len(numbers)))
+    isPrime[0] = isPrime[1] = True
+    for i in range(int(math.sqrt(len(isPrime)))):
+        if not isPrime[i]:
             j = 2
-            while i*j < 10000000:
-                isPrime[i*j] = False
+            while i*j < len(isPrime):
+                isPrime[i*j] = True
                 j += 1
         
     def getNumber(numbers, visited, result, depth):
@@ -14,7 +14,7 @@ def solution(numbers):
             sum = 0
             for i in range(len(result)):
                 sum += int(math.pow(10, i)) * result[len(result)-1-i]
-            if isPrime[sum]:
+            if not isPrime[sum]:
                 hs.add(sum)
             return
         for i in range(len(numbers)):
