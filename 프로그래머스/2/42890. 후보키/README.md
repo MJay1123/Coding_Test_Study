@@ -1,10 +1,10 @@
 # [level 2] 후보키 - 42890 
 
-[문제 링크](https://school.programmers.co.kr/learn/courses/30/lessons/42890?language=java) 
+[문제 링크](https://school.programmers.co.kr/learn/courses/30/lessons/42890?language=python3) 
 
 ### 성능 요약
 
-메모리: 87 MB, 시간: 10.15 ms
+메모리: 9.2 MB, 시간: 6.74 ms
 
 ### 구분
 
@@ -16,7 +16,7 @@
 
 ### 제출 일자
 
-2026년 01월 04일 15:38:17
+2026년 01월 04일 18:57:00
 
 ### 문제 설명
 
