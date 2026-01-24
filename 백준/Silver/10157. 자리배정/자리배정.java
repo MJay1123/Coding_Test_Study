@@ -21,15 +21,15 @@ public class Main {
             int num = 1;
             int depth = 0;
             int moveIndex = 0;
-//            while (true) {
-//                if (num + ((C - depth * 2) * 2 + (R - depth * 2) * 2 - 4) > K) {
-//                    break;
-//                }
-//                num += ((C - depth * 2) * 2 + (R - depth * 2) * 2 - 4);
-//                r++;
-//                c++;
-//                depth++;
-//            }
+            while (true) {
+                if (num + ((C - depth * 2) * 2 + (R - depth * 2) * 2 - 4) > K) {
+                    break;
+                }
+                num += ((C - depth * 2) * 2 + (R - depth * 2) * 2 - 4);
+                r++;
+                c++;
+                depth++;
+            }
             int d = r;
             int answerR = 0;
             int answerC = 0;
