@@ -37,13 +37,22 @@ class Solution {
 		return r >= 0 && r < N && c >= 0 && c < N;
 	}
 
-	public static void search(int[][] map, int[][] arr, int r, int c) {
-		for (int m = 0; m < 4; m++) {
-			int nr = r + move[m][0];
-			int nc = c + move[m][1];
-			if (checkRange(nr, nc, map.length) && arr[nr][nc] > arr[r][c] + map[nr][nc]) {
-				arr[nr][nc] = arr[r][c] + map[nr][nc];
-				search(map, arr, nr, nc);
+	public static void search(int[][] map, int[][] arr, int startR, int startC) {
+		Queue<Integer> rQueue = new LinkedList<>();
+		Queue<Integer> cQueue = new LinkedList<>();
+		rQueue.offer(startR);
+		cQueue.offer(startC);
+		while(!rQueue.isEmpty()) {
+			int r = rQueue.poll();
+			int c = cQueue.poll();
+			for (int m = 0; m < 4; m++) {
+				int nr = r + move[m][0];
+				int nc = c + move[m][1];
+				if (checkRange(nr, nc, map.length) && arr[nr][nc] > arr[r][c] + map[nr][nc]) {
+					arr[nr][nc] = arr[r][c] + map[nr][nc];
+					rQueue.offer(nr);
+					cQueue.offer(nc);
+				}
 			}
 		}
 	}
