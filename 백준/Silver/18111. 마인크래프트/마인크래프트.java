@@ -1,76 +1,63 @@
-
-
 import java.io.*;
+import java.util.Arrays;
 import java.util.StringTokenizer;
 
 public class Main {
+    static int N, M, B;
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
         StringTokenizer st;
 
         st = new StringTokenizer(br.readLine());
-        int N = Integer.parseInt(st.nextToken());
-        int M = Integer.parseInt(st.nextToken());
-        int B = Integer.parseInt(st.nextToken());
+        N = Integer.parseInt(st.nextToken());
+        M = Integer.parseInt(st.nextToken());
+        B = Integer.parseInt(st.nextToken());
 
         int[][] map = new int[N][M];
-        int maxLevel = 0;
-        for(int i=0; i<N; i++){
+        int[] arr = new int[257];
+        int[] heightRange = new int[2];
+        heightRange[0] = 256;
+        for(int i=0; i<N; i++) {
             st = new StringTokenizer(br.readLine());
-            for(int j=0; j<M; j++){
+            for (int j = 0; j < M; j++) {
                 map[i][j] = Integer.parseInt(st.nextToken());
-                maxLevel = Math.max(maxLevel, map[i][j]);
+                arr[map[i][j]]++;
+                heightRange[1] = Math.max(heightRange[1], map[i][j]);
+                heightRange[0] = Math.min(heightRange[0], map[i][j]);
             }
         }
-        int minTime = getBlockCount(map, 0) * 1 + getDigCount(map, 0) * 2;
-        int minLevel = 0;
         // 땅 파기 : 시간 2 / 블럭 쌓기 : 시간 1
-        for(int level = 1; level <= maxLevel; level++){
-            int blockCount = getBlockCount(map, level);
-            int digCount = getDigCount(map, level);
-            if(B + digCount < blockCount){
+        int[] result = getTime(arr, heightRange);
+        bw.write(result[0] + " " + result[1] + "\n");
+        bw.flush();
+    }
+
+    public static int[] getTime(int[] arr, int[] heightRange){
+        int minTime = Integer.MAX_VALUE;
+        int minH = heightRange[0];
+        int maxH = heightRange[1];
+        int[] result = new int[2];      // {time, height}
+        for(int height=heightRange[0]; height<=heightRange[1]; height++){
+            int needBlock = 0;
+            int time = 0;
+            for(int i=minH; i<=maxH; i++){
+                if(height > i){
+                    time += (height-i)*arr[i];
+                } else {
+                    time += 2*(i-height)*arr[i];
+                }
+                needBlock += (height-i)*arr[i];
+            }
+            if(needBlock > B){
                 continue;
             }
-            int time = getTime(digCount, blockCount);
             if(minTime >= time){
                 minTime = time;
-                minLevel = level;
-            } else {
-                break;
+                result[0] = minTime;
+                result[1] = height;
             }
         }
-        System.out.println(minTime + " " + minLevel);
-    }
-
-    public static int getTime(int digCount, int blockCount){
-        int time = digCount * 2 + blockCount;
-        return time;
-    }
-
-    public static int getDigCount(int[][] map, int level){
-        int count = 0;
-        for(int i=0; i<map.length; i++){
-            for(int j=0; j<map[0].length; j++){
-                int difference = map[i][j] - level;
-                if(difference >= 0){
-                    count += difference;
-                }
-            }
-        }
-        return count;
-    }
-
-    public static int getBlockCount(int[][] map, int level){
-        int count = 0;
-        for(int i=0; i<map.length; i++){
-            for(int j=0; j<map[0].length; j++){
-                int difference = level - map[i][j];
-                if(difference >= 0){
-                    count += difference;
-                }
-            }
-        }
-        return count;
+        return result;
     }
 }
