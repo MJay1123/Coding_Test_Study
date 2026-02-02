@@ -2,6 +2,7 @@ import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.util.Arrays;
 import java.util.StringTokenizer;
 
 class Solution {
@@ -15,23 +16,20 @@ class Solution {
 			StringTokenizer st = new StringTokenizer(br.readLine());
 			int N = Integer.parseInt(st.nextToken());
 			int M = Integer.parseInt(st.nextToken());
-			int[][] map = new int[N][N];
+			int[][] map = new int[N+1][N+1];
+			int[][] arr = new int[N+1][N+1];
 			for(int r=0; r<N; r++) {
 				st = new StringTokenizer(br.readLine());
 				for(int c=0; c<N; c++) {
-					map[r][c] = Integer.parseInt(st.nextToken());
+					map[r+1][c+1] = Integer.parseInt(st.nextToken());
+					arr[r+1][c+1] = map[r+1][c+1] + arr[r][c+1] + arr[r+1][c] - arr[r][c];
 				}
 			}
 			int answer = 0;
-			for(int r=0; r<N-M+1; r++) {
-				for(int c=0; c<N-M+1; c++) {
-					int sum = 0;
-					for(int i=0; i<M; i++) {
-						for(int j=0; j<M; j++) {
-							sum += map[r+i][c+j];
-						}
-					}
-					answer = Math.max(answer,  sum);
+			for(int r=1; r<N+1-M+1; r++) {
+				for(int c=1; c<N+1-M+1; c++) {
+					int temp = arr[r+M-1][c+M-1] - arr[r+M-1][c-1] - arr[r-1][c+M-1] + arr[r-1][c-1];
+					answer = Math.max(answer, temp);
 				}
 			}
 			sb.append(answer).append("\n");
