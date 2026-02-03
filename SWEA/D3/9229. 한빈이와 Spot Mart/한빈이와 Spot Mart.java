@@ -15,25 +15,21 @@ public class Solution {
 		for (int testCase = 1; testCase <= TC; testCase++) {
 			sb.append("#").append(testCase).append(" ");
 			StringTokenizer st = new StringTokenizer(br.readLine());
-			int N = Integer.parseInt(st.nextToken());	// 과자 봉지 개수
-			int M = Integer.parseInt(st.nextToken());	// 무게 합 제한
+			int N = Integer.parseInt(st.nextToken()); // 과자 봉지 개수
+			int M = Integer.parseInt(st.nextToken()); // 무게 합 제한
 			st = new StringTokenizer(br.readLine());
 			int[] snacks = new int[N];
-			for(int i=0; i<N; i++) {
+			for (int i = 0; i < N; i++) {
 				snacks[i] = Integer.parseInt(st.nextToken());
 			}
-			Arrays.sort(snacks);
-			int left = 0;
-			int right = N-1;
-			int sum = 0;
 			int answer = -1;
-			while(left < right) {
-				sum = snacks[left] + snacks[right];
-				if(sum <= M) {
-					answer = Math.max(answer,  sum);
-					left++;
-				} else {
-					right--;
+			int sum = 0;
+			for (int i = 0; i < N - 1; i++) {
+				for (int j = i + 1; j < N; j++) {
+					sum = snacks[i] + snacks[j];
+					if (sum <= M) {
+						answer = Math.max(answer, sum);
+					}
 				}
 			}
 			sb.append(answer).append("\n");
