@@ -24,7 +24,8 @@ class Solution {
 			}
 			boolean[][] visited = new boolean[R][C];
 			boolean[] item = new boolean[26];
-			DFS(0, 0, map, visited, item, 0);
+			
+			DFS(0, 0, map, visited, item, 1);
             sb.append(answer).append("\n");
 		}
 		bw.write(sb.toString());
@@ -36,17 +37,15 @@ class Solution {
 	public static void DFS(int r, int c, char[][] map, boolean[][] visited, boolean[] item, int count) {
 		visited[r][c] = true;
 		item[map[r][c]-'A'] = true;
-		count++;
 		answer = Math.max(answer, count);
 		for(int i=0; i<4; i++) {
 			int nr = r + move[i][0];
 			int nc = c + move[i][1];
 			if(checkRange(nr, nc, map) && !visited[nr][nc] && !item[map[nr][nc]-'A']){
-				DFS(nr, nc, map, visited, item, count);
+				DFS(nr, nc, map, visited, item, count+1);
 			}
 		}
 		item[map[r][c]-'A'] = false;
-		count--;
 		visited[r][c] = false;
 	}
 }
