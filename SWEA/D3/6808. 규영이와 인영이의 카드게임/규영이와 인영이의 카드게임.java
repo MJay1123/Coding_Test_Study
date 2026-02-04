@@ -3,6 +3,9 @@ import java.io.*;
 
 class Solution {
 	static int[] answer = new int[2];
+	static boolean[] visited;
+	static int[] arrA;
+	static int[] arrB;
 	public static void main(String args[]) throws Exception	{
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
@@ -11,21 +14,21 @@ class Solution {
 		for(int test_case = 1; test_case <= T; test_case++) {
 			sb.append("#").append(test_case).append(" ");
 			StringTokenizer st = new StringTokenizer(br.readLine());
-			int[] arrA = new int[9];
-			boolean[] visited = new boolean[19];
+			arrA = new int[9];
+			visited = new boolean[19];
 			for(int i=0; i<9; i++) {
 				arrA[i] = Integer.parseInt(st.nextToken());
 				visited[arrA[i]] = true;
 			}
-			int[] arrB = new int[9];
+			arrB = new int[9];
 			answer = new int[2];
-			P(visited, 0, arrA, arrB);
+			P(0);
             sb.append(answer[0]).append(" ").append(answer[1]).append("\n");
 		}
 		bw.write(sb.toString());
         bw.flush();
 	}
-	public static void P(boolean[] visited, int index, int[] arrA, int[] arrB) {
+	public static void P(int index) {
 		if(index == 9) {
 			int[] result = new int[2];
 			for(int i=0; i<9; i++) {
@@ -46,7 +49,7 @@ class Solution {
 			if(!visited[i]) {
 				visited[i] = true;
 				arrB[index] = i;
-				P(visited, index+1, arrA, arrB);
+				P(index+1);
 				visited[i] = false;
 			}
 		}
