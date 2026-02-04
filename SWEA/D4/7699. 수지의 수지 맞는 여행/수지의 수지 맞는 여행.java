@@ -23,8 +23,8 @@ class Solution {
 				}
 			}
 			boolean[][] visited = new boolean[R][C];
-			HashSet<Character> hs = new HashSet<>();
-			DFS(0, 0, map, visited, hs);
+			boolean[] item = new boolean[26];
+			DFS(0, 0, map, visited, item, 0);
             sb.append(answer).append("\n");
 		}
 		bw.write(sb.toString());
@@ -33,18 +33,20 @@ class Solution {
 	public static boolean checkRange(int r, int c, char[][] map) {
 		return r >= 0 && r < map.length && c >= 0 && c < map[0].length;
 	}
-	public static void DFS(int r, int c, char[][] map, boolean[][] visited, HashSet<Character> hs) {
+	public static void DFS(int r, int c, char[][] map, boolean[][] visited, boolean[] item, int count) {
 		visited[r][c] = true;
-		hs.add(map[r][c]);
-		answer = Math.max(answer,  hs.size());
+		item[map[r][c]-'A'] = true;
+		count++;
+		answer = Math.max(answer, count);
 		for(int i=0; i<4; i++) {
 			int nr = r + move[i][0];
 			int nc = c + move[i][1];
-			if(checkRange(nr, nc, map) && !visited[nr][nc] && !hs.contains(map[nr][nc])){
-				DFS(nr, nc, map, visited, hs);
+			if(checkRange(nr, nc, map) && !visited[nr][nc] && !item[map[nr][nc]-'A']){
+				DFS(nr, nc, map, visited, item, count);
 			}
 		}
-		hs.remove(map[r][c]);
+		item[map[r][c]-'A'] = false;
+		count--;
 		visited[r][c] = false;
 	}
 }
