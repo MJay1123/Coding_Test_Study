@@ -49,9 +49,22 @@ class Solution {
 		Queue<Integer> rQueue = new ArrayDeque<>();
 		Queue<Integer> cQueue = new ArrayDeque<>();
 		for(int[] w : waterList) {
-			distance[w[0]][w[1]] = 0;
-			rQueue.offer(w[0]);
-			cQueue.offer(w[1]);
+			int r = w[0];
+			int c = w[1];
+			distance[r][c] = 0;
+			boolean temp = false;
+			for(int m=0; m<4; m++) {
+				int nr = r + move[m][0];
+				int nc = c + move[m][1];
+				if(checkRange(nr, nc, map) && map[nr][nc] == 'L') {
+					temp = true;
+					break;
+				}
+			}
+			if(temp) {
+				rQueue.offer(r);
+				cQueue.offer(c);
+			}
 		}
 		while(!rQueue.isEmpty()) {
 			int r = rQueue.poll();
