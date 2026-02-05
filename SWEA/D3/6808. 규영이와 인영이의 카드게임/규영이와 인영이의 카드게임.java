@@ -30,15 +30,16 @@ class Solution {
 	}
 	public static void P(int index) {
 		if(index == 9) {
-			int[] result = new int[2];
+			int reA = 0;
+			int reB = 0;
 			for(int i=0; i<9; i++) {
 				if(arrA[i] < arrB[i]) {
-					result[1] += arrA[i] + arrB[i];
+					reB += arrA[i] + arrB[i];
 				} else {
-					 result[0] += arrA[i] + arrB[i];
+					 reA += arrA[i] + arrB[i];
 				}
 			}
-			if(result[0] > result[1]) {
+			if(reA > reB) {
 				answer[0]++;
 			} else {
 				answer[1]++;
