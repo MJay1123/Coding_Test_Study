@@ -34,19 +34,20 @@ public class Main {
 	public static void change(int[] arr, int index) {
 		int temp = arr[index];
 		PriorityQueue<Integer> pq = new PriorityQueue<>();
+		Stack<Integer> stack = new Stack<>();
 		PriorityQueue<Integer> pq2 = new PriorityQueue<>();
 		for(int i=index+1; i<arr.length; i++) {
 			pq.offer(arr[i]);
 		}
 		while(!pq.isEmpty()) {
 			int num = pq.poll();
-			if(num < temp) {
-				pq2.offer(num);
-			} else if(num > temp) {
+			if(temp > num) {
+				stack.push(num);
+			} else if(temp < num) {
 				arr[index] = num;
 				pq.offer(temp);
-				while(!pq2.isEmpty()) {
-					pq.offer(pq2.poll());
+				while(!stack.isEmpty()) {
+					pq.offer(stack.pop());
 				}
 				break;
 			}
