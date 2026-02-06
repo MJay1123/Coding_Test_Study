@@ -28,6 +28,9 @@ class Solution {
 					if((i & (1 << j)) > 0) {
 						scoreSum += ingredients[j][0];
 						calorieSum += ingredients[j][1];
+						if(calorieSum > L) {
+							break;
+						}
 					}
 				}
 				if(calorieSum <= L) {
