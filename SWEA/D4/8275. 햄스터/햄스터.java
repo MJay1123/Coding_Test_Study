@@ -16,7 +16,7 @@ class Solution {
 			N = Integer.parseInt(st.nextToken());
 			X = Integer.parseInt(st.nextToken()); // 우리 최대 햄스터 수
 			M = Integer.parseInt(st.nextToken());
-			int[] cages = new int[N + 1];
+			int[][] cages = new int[2][N + 1];
 			int[][] arr = new int[M][3];
 			for (int i = 0; i < M; i++) {
 				st = new StringTokenizer(br.readLine());
@@ -39,28 +39,29 @@ class Solution {
 		bw.flush();
 	}
 
-	public static int[] copyArray(int[] array) {
-		int[] newArray = new int[array.length];
+	public static int[] copyArray(int[][] array) {
+		int[] newArray = new int[array[0].length];
 		for (int i = 0; i < newArray.length; i++) {
-			newArray[i] = array[i];
+			newArray[i] = array[0][i];
 		}
 		return newArray;
 	}
 
-	public static void C(int index, int[] cages, int[][] arr) {
+	public static void C(int index, int[][] cages, int[][] arr) {
 		if (index == N + 1) {
 			if (check(cages, arr)) {
 				if (answer == null) {
 					answer = copyArray(cages);
 				} else {
-					if (answer[0] < cages[0]) {
+					if (answer[0] < cages[0][0]) {
 						answer = copyArray(cages);
-					} else if (answer[0] == cages[0]) {
+					} else if (answer[0] == cages[0][0]) {
 						for (int i = 1; i <= N; i++) {
-							if (answer[i] < cages[i]) {
+							if (answer[i] < cages[0][i]) {
 								return;
-							} else if (answer[i] > cages[i]) {
+							} else if (answer[i] > cages[0][i]) {
 								answer = copyArray(cages);
+								return;
 							} else {
 								continue;
 							}
@@ -71,22 +72,21 @@ class Solution {
 			return;
 		}
 		for (int i = X; i >= 0; i--) {
-			cages[index] = i;
+			cages[0][index] = i;
 			C(index + 1, cages, arr);
 		}
 	}
 
-	public static boolean check(int[] cages, int[][] arr) {
-		int[] accumulateCages = new int[N + 1];
+	public static boolean check(int[][] cages, int[][] arr) {
 		for (int i = 1; i <= N; i++) {
-			accumulateCages[i] = accumulateCages[i - 1] + cages[i];
+			cages[1][i] = cages[1][i - 1] + cages[0][i];
 		}
-		cages[0] = accumulateCages[N];
+		cages[0][0] = cages[1][N];
 		for (int i = 0; i < M; i++) {
 			int left = arr[i][0];
 			int right = arr[i][1];
 			int count = arr[i][2];
-			if (accumulateCages[right] - accumulateCages[left - 1] != count) {
+			if (cages[1][right] - cages[1][left - 1] != count) {
 				return false;
 			}
 		}
