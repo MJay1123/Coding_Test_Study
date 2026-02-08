@@ -12,11 +12,8 @@ class Solution {
 			StringTokenizer st = new StringTokenizer(br.readLine());
 			int N = Integer.parseInt(st.nextToken());
 			int M = Integer.parseInt(st.nextToken());
-			int temp = 0;
-			for(int i=0; i<N; i++) {
-				temp = temp | (1 << i);
-			}
-			if((temp & M) == temp) {
+			int lastNBit = (1 << N) -1 ;
+			if((lastNBit & M) == lastNBit) {
 				sb.append("ON");
 			} else {
 				sb.append("OFF");
