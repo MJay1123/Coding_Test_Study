@@ -2,7 +2,6 @@ import java.util.*;
 import java.io.*;
 
 public class Solution {
-	static int startC = 0;
 	public static void main(String[] args) throws IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
@@ -11,40 +10,58 @@ public class Solution {
 			br.readLine();
 			sb.append("#").append(testCase).append(" ");
 			int[][] ladders = new int[100][100];
+			List<Integer> lineList = new ArrayList<>();
 			int endC = 0;
-			for (int r = 0; r < 100; r++) {
-				StringTokenizer st = new StringTokenizer(br.readLine());
-				for (int c = 0; c < 100; c++) {
-					ladders[r][c] = Integer.parseInt(st.nextToken());
-					if(ladders[r][c] == 2) {
-						endC = c;
-					}
+			StringTokenizer st = new StringTokenizer(br.readLine());
+			for (int c = 0; c < 100; c++) {
+				ladders[0][c] = Integer.parseInt(st.nextToken());
+				if (ladders[0][c] == 1) {
+					lineList.add(c);
 				}
 			}
-			DFS(99, endC, ladders);
-			int answer = startC;
+			for (int r = 1; r < 99; r++) {
+				st = new StringTokenizer(br.readLine());
+				for (int c = 0; c < 100; c++) {
+					ladders[r][c] = Integer.parseInt(st.nextToken());
+				}
+			}
+			st = new StringTokenizer(br.readLine());
+			for (int c = 0; c < 100; c++) {
+				ladders[99][c] = Integer.parseInt(st.nextToken());
+				if (ladders[99][c] == 2) {
+					endC = c;
+				}
+			}
+			int lineIndex = 0;
+			for(int i=0; i<lineList.size(); i++) {
+				if(lineList.get(i) == endC) {
+					lineIndex = i;
+				}
+			}
+			int answer = goUp(99, endC, ladders, lineIndex, lineList);
 			sb.append(answer).append("\n");
 		}
 		bw.write(sb.toString());
 		bw.flush();
 	}
+
 	public static boolean checkRange(int r, int c) {
 		return r >= 0 && r < 100 && c >= 0 && c < 100;
 	}
-	public static void DFS(int r, int c, int[][] ladders) {
-		if(r == 0) {
-			startC = c;
-			return;
-		}
-		if(checkRange(r, c-1) && ladders[r][c-1] == 1) {
-			while(checkRange(r, c-1) && ladders[r][c-1] == 1) {
-				c--;
+
+	public static int goUp(int r, int c, int[][] ladders, int lineIndex, List<Integer> lineList) {
+		while (true) {
+			if (r == 0) {
+				return c;
 			}
-		} else if(checkRange(r, c+1) && ladders[r][c+1] == 1) {
-			while(checkRange(r, c+1) && ladders[r][c+1] == 1) {
-				c++;	
+			if (checkRange(r, c - 1) && ladders[r][c - 1] == 1) {
+				lineIndex--;
+				c = lineList.get(lineIndex);
+			} else if (checkRange(r, c + 1) && ladders[r][c + 1] == 1) {
+				lineIndex++;
+				c = lineList.get(lineIndex);
 			}
+			r--;
 		}
-		DFS(r-1, c, ladders);
 	}
 }
