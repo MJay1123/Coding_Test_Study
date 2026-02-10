@@ -25,7 +25,7 @@ public class Main {
         map = new int[N][N];
         houseList = new ArrayList<>();
         chickenList = new ArrayList<>();
-        answer = Integer.MAX_VALUE;
+        answer = 10000;
         for (int r = 0; r < N; r++) {
             st = new StringTokenizer(br.readLine());
             for (int c = 0; c < N; c++) {
@@ -71,8 +71,5 @@ public class Main {
     	int r2 = loc2.r;
     	int c2 = loc2.c;
     	return Math.max(r1, r2) - Math.min(r1, r2) + Math.max(c1, c2) - Math.min(c1, c2);
-    }
-    public static boolean checkRange(int r, int c){
-        return r >= 0 && r < N && c >= 0 && c < N;
     }
 }
