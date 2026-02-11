@@ -1,32 +1,31 @@
 import java.util.*;
 import java.io.*;
 
-class Solution {
-	public static void main(String args[]) throws Exception	{
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+public class Solution {
+	static int N;
+	public static void main(String[] args) throws IOException {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+		StringBuilder sb = new StringBuilder();
 		int T = Integer.parseInt(br.readLine());
-		for(int test_case = 1; test_case <= T; test_case++) {
-            int N = Integer.parseInt(br.readLine());
-            int distance = (N-1) / 2;
-            int[][] arr = new int[N][N];
-            int answer = 0;
-            for(int r=0; r<N; r++){
-                String line = br.readLine();
-                for(int c=0; c<N; c++){
-                    arr[r][c] = line.charAt(c) - '0';
-                    if(getDistance(r, c, distance, distance) <= distance){
-                        answer += arr[r][c];
-                    }
-                }
-            }
-			StringBuilder sb = new StringBuilder();
-            sb.append("#").append(test_case).append(" ").append(answer).append("\n");
-            bw.write(sb.toString());
+		for(int testCase=1; testCase<=T; testCase++) {
+			N = Integer.parseInt(br.readLine());
+			int center = N / 2;
+			int distance = N / 2;
+			int answer = 0;
+			int[][] farm = new int[N][N];
+			for(int r=0; r<N; r++) {
+				String temp = br.readLine();
+				for(int c=0; c<N; c++) {
+					farm[r][c] = temp.charAt(c) - '0';
+					if(Math.abs(r-center) + Math.abs(c-center) <= distance) {
+						answer += farm[r][c];
+					}
+				}
+			}
+			sb.append("#").append(testCase).append(" ").append(answer).append("\n");
 		}
-        bw.flush();
+		bw.write(sb.toString());
+		bw.flush();
 	}
-    public static int getDistance(int r1, int c1, int r2, int c2){
-        return Math.abs(r1-r2) + Math.abs(c1-c2);
-    }
 }
