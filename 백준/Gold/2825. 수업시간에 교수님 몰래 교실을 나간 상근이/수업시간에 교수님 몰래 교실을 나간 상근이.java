@@ -8,28 +8,20 @@ public class Main {
 		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
 		StringBuilder sb = new StringBuilder();
 		N = Integer.parseInt(br.readLine());
-		long[] numbers = new long[N];
-		int[] bitsOfNumbers = new int[N];
 		int[] countOfBits = new int[(1 << 10)];
 		for(int i=0; i<N; i++) {
-			numbers[i] = Long.parseLong(br.readLine());
-			long n = numbers[i];
+			long num = Long.parseLong(br.readLine());
 			int bit = 0;
-			while(n > 0) {
-				int digit = (int)(n % 10);
+			while(num > 0) {
+				int digit = (int)(num % 10);
 				bit = (bit | (1 << digit));
-				n /= 10;
+				num /= 10;
 			}
-//			System.out.println("number : " + numbers[i] + ", bit : " + Integer.toString(bit, 2));
-			bitsOfNumbers[i] = bit;
 			countOfBits[bit]++;
 		}
 		long answer = 0;
 		for(int i=0; i<countOfBits.length; i++) {
 			int count = countOfBits[i];
-			if(count > 0) {
-//				System.out.println("bit : " + Integer.toString(i, 2) + ", count : " + count);
-			}
 			answer += C(count);
 		}
 		for(int i=0; i<countOfBits.length-1; i++) {
