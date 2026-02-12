@@ -4,6 +4,8 @@ import java.io.*;
 public class Solution {
 	static int N;
 	static int[][] around = {{1,0}, {0,1}, {-1,0}, {0,-1}};
+	static int[][] rooms;
+	static boolean[][] visited;
 	public static void main(String[] args) throws IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
@@ -11,7 +13,7 @@ public class Solution {
 		int T = Integer.parseInt(br.readLine());
 		for(int testCase=1; testCase <= T; testCase++) {
 			N = Integer.parseInt(br.readLine());
-			int[][] rooms = new int[N][N];
+			rooms = new int[N][N];
 			for(int r=0; r<N; r++) {
 				StringTokenizer st = new StringTokenizer(br.readLine());
 				for(int c=0; c<N; c++) {
@@ -22,6 +24,7 @@ public class Solution {
 			int count = 0;
 			for(int r=0; r<N; r++) {
 				for(int c=0; c<N; c++) {
+					visited = new boolean[N][N];
 					int temp = BFS(r, c, rooms);
 					if(count < temp) {
 						count = temp;
@@ -38,7 +41,6 @@ public class Solution {
 	}
 	public static int BFS(int startR, int startC, int[][] rooms) {
 		int result = 0;
-		boolean[][] visited = new boolean[N][N];
 		Queue<Integer> rQueue = new LinkedList<>();
 		Queue<Integer> cQueue = new LinkedList<>();
 		Queue<Integer> distQueue = new LinkedList<>();
