@@ -41,26 +41,21 @@ public class Solution {
 	}
 	public static int BFS(int startR, int startC, int[][] rooms) {
 		int result = 0;
-		Queue<Integer> rQueue = new LinkedList<>();
-		Queue<Integer> cQueue = new LinkedList<>();
-		Queue<Integer> distQueue = new LinkedList<>();
-		rQueue.offer(startR);
-		cQueue.offer(startC);
-		distQueue.offer(1);
+		Queue<int[]> queue = new LinkedList<>();
+		queue.offer(new int[] {startR, startC, 1});
 		visited[startR][startC] = true;
-		while(!rQueue.isEmpty()){
-			int r = rQueue.poll();
-			int c = cQueue.poll();
-			int dist = distQueue.poll();
+		while(!queue.isEmpty()){
+			int[] arr = queue.poll();
+			int r = arr[0];
+			int c = arr[1];
+			int dist = arr[2];
 			result = Math.max(result, dist);
 			for(int i=0; i<4; i++) {
 				int nr = r + around[i][0];
 				int nc = c + around[i][1];
 				if(checkRange(nr, nc) && !visited[nr][nc] && rooms[nr][nc] == rooms[r][c] + 1) {
 					visited[nr][nc] = true;
-					rQueue.offer(nr);
-					cQueue.offer(nc);
-					distQueue.offer(dist + 1);
+					queue.offer(new int[] {nr, nc, dist+1});
 				}
 			}
 		}
