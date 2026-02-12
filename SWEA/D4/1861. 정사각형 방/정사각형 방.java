@@ -21,44 +21,49 @@ public class Solution {
 				}
 			}
 			int startNumber = 0;
-			int count = 0;
+			int maxCount = 0;
+			visited = new boolean[N][N];
 			for(int r=0; r<N; r++) {
 				for(int c=0; c<N; c++) {
-					visited = new boolean[N][N];
-					int temp = BFS(r, c, rooms);
-					if(count < temp) {
-						count = temp;
-						startNumber = rooms[r][c];
-					} else if(count == temp) {
-						startNumber = Math.min(startNumber,  rooms[r][c]);
+					if(!visited[r][c]) {
+						int[] result = BFS(r, c);
+						if(maxCount < result[1]) {
+							maxCount = result[1];
+							startNumber = result[0];
+						} else if(maxCount == result[1]) {
+							startNumber = Math.min(startNumber, result[0]);
+						}
 					}
 				}
 			}
-			sb.append("#").append(testCase).append(" ").append(startNumber).append(" ").append(count).append("\n");
+			sb.append("#").append(testCase).append(" ").append(startNumber).append(" ").append(maxCount).append("\n");
 		}
 		bw.write(sb.toString());
 		bw.flush();
 	}
-	public static int BFS(int startR, int startC, int[][] rooms) {
-		int result = 0;
+	public static int[] BFS(int startR, int startC) {
+		int minimumNum = N * N;
+		int count = 0;
 		Queue<int[]> queue = new LinkedList<>();
-		queue.offer(new int[] {startR, startC, 1});
+		queue.offer(new int[] {startR, startC});
 		visited[startR][startC] = true;
+		count++;
 		while(!queue.isEmpty()){
 			int[] arr = queue.poll();
 			int r = arr[0];
 			int c = arr[1];
-			int dist = arr[2];
-			result = Math.max(result, dist);
+			minimumNum = Math.min(minimumNum, rooms[r][c]);
 			for(int i=0; i<4; i++) {
 				int nr = r + around[i][0];
 				int nc = c + around[i][1];
-				if(checkRange(nr, nc) && !visited[nr][nc] && rooms[nr][nc] == rooms[r][c] + 1) {
+				if(checkRange(nr, nc) && !visited[nr][nc] && (rooms[nr][nc] == rooms[r][c] + 1 || rooms[nr][nc] == rooms[r][c] - 1)) {
 					visited[nr][nc] = true;
-					queue.offer(new int[] {nr, nc, dist+1});
+					queue.offer(new int[] {nr, nc});
+					count++;
 				}
 			}
 		}
+		int[] result = new int[] {minimumNum, count};
 		return result;
 	}
 	public static boolean checkRange(int r, int c) {
