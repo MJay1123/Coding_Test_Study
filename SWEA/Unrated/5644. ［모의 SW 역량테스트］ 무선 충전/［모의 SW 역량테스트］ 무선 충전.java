@@ -17,10 +17,6 @@ public class Solution {
 			x += directions[direction][0];
 			y += directions[direction][1];
 		}
-		@Override
-		public String toString() {
-			return "User [x=" + x + ", y=" + y + "]";
-		}
 	}
 	static class BC implements Comparable<BC> {
 		int x, y, C, P;
@@ -34,20 +30,15 @@ public class Solution {
 		public int compareTo(BC o) {
 			return o.P - this.P;
 		}
-		@Override
-		public boolean equals(Object o) {
-			BC bc = (BC)o;
-			return this.x == bc.x && this.y == bc.y && this.C == bc.C && this.P == bc.P;
-		}
-		@Override
-		public int hashCode() {
-			return Objects.hash(x, y, C, P);
-		}
-		@Override
-		public String toString() {
-			return "BC [x=" + x + ", y=" + y + ", C=" + C + ", P=" + P + "]";
-		}
-		
+//		@Override
+//		public boolean equals(Object o) {
+//			BC bc = (BC)o;
+//			return this.x == bc.x && this.y == bc.y && this.C == bc.C && this.P == bc.P;
+//		}
+//		@Override
+//		public int hashCode() {
+//			return Objects.hash(x, y, C, P);
+//		}
 	}
 	
 	public static void main(String[] args) throws IOException {
@@ -82,17 +73,10 @@ public class Solution {
 			PriorityQueue<BC> pqB = new PriorityQueue<>();
 			int answer = 0;
 			answer += checkBC(pqA, pqB);
-//			System.out.println("T : " + 0);
-//			System.out.println("answer : " + answer);
 			for(int t=0; t<M; t++) {
 				userA.move(directionArray[0][t]);
 				userB.move(directionArray[1][t]);
-//				System.out.println();
-//				System.out.println("Time : " + (t+1));
-//				System.out.println("userA : " + userA);
-//				System.out.println("userB : " + userB);
 				answer += checkBC(pqA, pqB);
-//				System.out.println("answer : " + answer);
 			}
 			bw.write("#" + testCase + " " + answer + "\n");
 		}
@@ -111,8 +95,6 @@ public class Solution {
 			}
 		}
 		int result = 0;
-//		System.out.println(pqA);
-//		System.out.println(pqB);
 		if(pqA.isEmpty()) {
 			if(pqB.isEmpty()) {
 				return 0;
