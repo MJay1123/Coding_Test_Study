@@ -35,34 +35,32 @@ public class Main {
 	}
 	public static boolean BFS(int startR, int startC) {
 		boolean[][] visited = new boolean[N][M];
-		Queue<Integer> rQueue = new LinkedList<>();
-		Queue<Integer> cQueue = new LinkedList<>();
-		rQueue.offer(startR);
-		cQueue.offer(startC);
+		int location = startR * 100 + startC;
+		Queue<Integer> queue = new LinkedList<>();
+		queue.offer(location);
 		visited[startR][startC] = true;
 		checked[startR][startC] = true;
-		while(!rQueue.isEmpty()) {
-			int r = rQueue.poll();
-			int c = cQueue.poll();
+		while(!queue.isEmpty()) {
+			location = queue.poll();
+			int r = location / 100;
+			int c = location % 100;
 			for(int i=0; i<8; i++) {
 				int nr = r + around[i][0];
 				int nc = c + around[i][1];
+				int nloc = nr * 100 + nc;
 				if(checkRange(nr, nc) && !visited[nr][nc]) {
 					if(farm[nr][nc] == farm[startR][startC]) {
-						rQueue.offer(nr);
-						cQueue.offer(nc);
+						queue.offer(nloc);
 						visited[nr][nc] = true;
 						checked[nr][nc] = true;
 					} else if(farm[nr][nc] < farm[startR][startC]) {
 						visited[nr][nc] = true;
 					} else {
-//						System.out.println("false! : " + startR + ", " + startC);
 						return false;
 					}
 				}
 			}
 		}
-//		System.out.println("true! : " + startR + ", " + startC);
 		return true;
 	}
 	public static boolean checkRange(int r, int c) {
