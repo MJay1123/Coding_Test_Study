@@ -36,8 +36,14 @@ public class Main {
 				answer = -1;
 			} else {
 				for (int ancestor : list) {
-					int dist1 = getDistance(ancestor, num1);
-					int dist2 = getDistance(ancestor, num2);
+					if(memo[num1][ancestor] == null) {
+						BFS(num1);
+					}
+					if(memo[num2][ancestor] == null) {
+						BFS(num2);
+					}
+					int dist1 = memo[num1][ancestor];
+					int dist2 = memo[num2][ancestor];
 					answer = Math.min(answer, Math.max(dist1, dist2));
 				}
 			}
@@ -45,30 +51,25 @@ public class Main {
 		}
 		bw.flush();
 	}
-
-	public static int getDistance(int ancestor, int num) {
-		if(memo[num][ancestor] != null) {
-			return memo[num][ancestor];
-		} else {
-			Queue<Integer> numQueue = new LinkedList<>();
-			Queue<Integer> distQueue = new LinkedList<>();
-			numQueue.offer(num);
-			distQueue.offer(0);
-			while (!numQueue.isEmpty()) {
-				int current = numQueue.poll();
-				int distance = distQueue.poll();
-				if(memo[num][current] == null) {
-					memo[num][current] = distance;					
-				} else {
-					memo[num][current] = Math.min(memo[num][current], distance);
-				}
-				for (int next : connectedFrom[current]) {
-					numQueue.offer(next);
-					distQueue.offer(distance + 1);
-				}
+	
+	public static void BFS(int startNum) {
+		Queue<Integer> numQueue = new LinkedList<>();
+		Queue<Integer> distQueue = new LinkedList<>();
+		numQueue.offer(startNum);
+		distQueue.offer(0);
+		while (!numQueue.isEmpty()) {
+			int current = numQueue.poll();
+			int distance = distQueue.poll();
+			if(memo[startNum][current] == null) {
+				memo[startNum][current] = distance;		
+			} else {
+				memo[startNum][current] = Math.min(memo[startNum][current], distance);
+			}
+			for (int next : connectedFrom[current]) {
+				numQueue.offer(next);
+				distQueue.offer(distance + 1);
 			}
 		}
-		return memo[num][ancestor];
 	}
 
 	public static List<Integer> getCommonAncestor(int num1, int num2) {
