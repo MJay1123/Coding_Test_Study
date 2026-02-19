@@ -14,7 +14,6 @@ class Solution {
 		for (int test_case = 1; test_case <= T; test_case++) {
 			N = Integer.parseInt(br.readLine());
 			cheese = new int[N][N];
-			HashSet<Integer> hs = new HashSet<>();
 			for (int r = 0; r < N; r++) {
 				StringTokenizer st = new StringTokenizer(br.readLine());
 				for (int c = 0; c < N; c++) {
@@ -25,10 +24,10 @@ class Solution {
 			for(int day=1; day<=100; day++) {
 				eatCheese(day);
 				int count = 0;
-				boolean[][] visited = new boolean[N][N];
+				boolean[] visited = new boolean[10000];
 				for (int r = 0; r < N; r++) {
 					for (int c = 0; c < N; c++) {
-						if (cheese[r][c] > 0 && !visited[r][c]) {
+						if (cheese[r][c] > 0 && !visited[100 * r + c]) {
 							BFS(r, c, visited);
 							count++;
 						}
@@ -47,8 +46,8 @@ class Solution {
 	}
 
 	public static void eatCheese(int day) {
-		for (int r = 0; r < cheese.length; r++) {
-			for (int c = 0; c < cheese[0].length; c++) {
+		for (int r = 0; r < N; r++) {
+			for (int c = 0; c < N; c++) {
 				if (cheese[r][c] == day) {
 					cheese[r][c] = -1;
 				}
@@ -56,10 +55,10 @@ class Solution {
 		}
 	}
 
-	public static void BFS(int startR, int startC, boolean[][] visited) {
+	public static void BFS(int startR, int startC, boolean[] visited) {
 		Queue<Integer> queue = new LinkedList<>();
 		queue.offer(startR * 100 + startC);
-		visited[startR][startC] = true;
+		visited[startR * 100 + startC] = true;
 		while (!queue.isEmpty()) {
 			int temp = queue.poll();
 			int r = temp / 100;
@@ -67,9 +66,9 @@ class Solution {
 			for (int i = 0; i < 4; i++) {
 				int nr = r + around[i][0];
 				int nc = c + around[i][1];
-				if (checkRange(nr, nc) && cheese[nr][nc] > 0 && !visited[nr][nc]) {
+				if (checkRange(nr, nc) && cheese[nr][nc] > 0 && !visited[nr * 100 + nc]) {
 					queue.offer(nr * 100 + nc);
-					visited[nr][nc] = true;
+					visited[nr * 100 + nc] = true;
 				}
 			}
 		}
