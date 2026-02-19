@@ -58,20 +58,18 @@ class Solution {
 	}
 
 	public static void BFS(int startR, int startC, boolean[][] visited) {
-		Queue<Integer> rQueue = new LinkedList<>();
-		Queue<Integer> cQueue = new LinkedList<>();
-		rQueue.offer(startR);
-		cQueue.offer(startC);
+		Queue<Integer> queue = new LinkedList<>();
+		queue.offer(startR * 100 + startC);
 		visited[startR][startC] = true;
-		while (!rQueue.isEmpty()) {
-			int r = rQueue.poll();
-			int c = cQueue.poll();
+		while (!queue.isEmpty()) {
+			int temp = queue.poll();
+			int r = temp / 100;
+			int c = temp % 100;
 			for (int i = 0; i < 4; i++) {
 				int nr = r + around[i][0];
 				int nc = c + around[i][1];
 				if (checkRange(nr, nc) && !eaten[nr][nc] && !visited[nr][nc]) {
-					rQueue.offer(nr);
-					cQueue.offer(nc);
+					queue.offer(nr * 100 + nc);
 					visited[nr][nc] = true;
 				}
 			}
