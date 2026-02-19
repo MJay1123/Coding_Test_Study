@@ -19,16 +19,10 @@ class Solution {
 				StringTokenizer st = new StringTokenizer(br.readLine());
 				for (int c = 0; c < N; c++) {
 					cheese[r][c] = Integer.parseInt(st.nextToken());
-					hs.add(cheese[r][c]);
 				}
 			}
-			PriorityQueue<Integer> pq = new PriorityQueue<>();
-			for(int day : hs) {
-				pq.offer(day);
-			}
 			int answer = 1;
-			while(!pq.isEmpty()) {
-				int day = pq.poll();
+			for(int day=1; day<=100; day++) {
 				eatCheese(day);
 				int count = 0;
 				boolean[][] visited = new boolean[N][N];
