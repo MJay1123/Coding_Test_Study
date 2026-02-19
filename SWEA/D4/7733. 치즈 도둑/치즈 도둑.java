@@ -15,19 +15,22 @@ class Solution {
 		for (int test_case = 1; test_case <= T; test_case++) {
 			N = Integer.parseInt(br.readLine());
 			cheese = new int[N][N];
-			int min = 100;
-			int max = 0;
+			HashSet<Integer> hs = new HashSet<>();
 			for (int r = 0; r < N; r++) {
 				StringTokenizer st = new StringTokenizer(br.readLine());
 				for (int c = 0; c < N; c++) {
 					cheese[r][c] = Integer.parseInt(st.nextToken());
-					min = Math.min(min,  cheese[r][c]);
-					max = Math.max(max,  cheese[r][c]);
+					hs.add(cheese[r][c]);
 				}
+			}
+			PriorityQueue<Integer> pq = new PriorityQueue<>();
+			for(int day : hs) {
+				pq.offer(day);
 			}
 			int answer = 1;
 			eaten = new boolean[N][N];
-			for (int day = min; day <= max; day++) {
+			while(!pq.isEmpty()) {
+				int day = pq.poll();
 				eatCheese(day);
 				int count = 0;
 				boolean[][] visited = new boolean[N][N];
@@ -54,7 +57,7 @@ class Solution {
 	public static void eatCheese(int day) {
 		for (int r = 0; r < cheese.length; r++) {
 			for (int c = 0; c < cheese[0].length; c++) {
-				if (cheese[r][c] <= day) {
+				if (cheese[r][c] == day) {
 					eaten[r][c] = true;
 				}
 			}
