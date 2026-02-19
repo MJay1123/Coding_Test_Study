@@ -3,7 +3,7 @@ import java.io.*;
 
 class Solution {
 	static int N;
-	static int[][] cheese;
+	static int[] cheese;
 	static int[][] around = { { 1, 0 }, { 0, 1 }, { -1, 0 }, { 0, -1 } };
 
 	public static void main(String args[]) throws Exception {
@@ -13,11 +13,11 @@ class Solution {
 		int T = Integer.parseInt(br.readLine());
 		for (int test_case = 1; test_case <= T; test_case++) {
 			N = Integer.parseInt(br.readLine());
-			cheese = new int[N][N];
+			cheese = new int[10000];
 			for (int r = 0; r < N; r++) {
 				StringTokenizer st = new StringTokenizer(br.readLine());
 				for (int c = 0; c < N; c++) {
-					cheese[r][c] = Integer.parseInt(st.nextToken());
+					cheese[r * 100 + c] = Integer.parseInt(st.nextToken());
 				}
 			}
 			int answer = 1;
@@ -27,7 +27,7 @@ class Solution {
 				boolean[] visited = new boolean[10000];
 				for (int r = 0; r < N; r++) {
 					for (int c = 0; c < N; c++) {
-						if (cheese[r][c] > 0 && !visited[100 * r + c]) {
+						if (cheese[r * 100 + c] > 0 && !visited[100 * r + c]) {
 							BFS(r, c, visited);
 							count++;
 						}
@@ -48,8 +48,8 @@ class Solution {
 	public static void eatCheese(int day) {
 		for (int r = 0; r < N; r++) {
 			for (int c = 0; c < N; c++) {
-				if (cheese[r][c] == day) {
-					cheese[r][c] = -1;
+				if (cheese[r * 100 + c] == day) {
+					cheese[r * 100 + c] = -1;
 				}
 			}
 		}
@@ -66,7 +66,7 @@ class Solution {
 			for (int i = 0; i < 4; i++) {
 				int nr = r + around[i][0];
 				int nc = c + around[i][1];
-				if (checkRange(nr, nc) && cheese[nr][nc] > 0 && !visited[nr * 100 + nc]) {
+				if (checkRange(nr, nc) && cheese[nr * 100 + nc] > 0 && !visited[nr * 100 + nc]) {
 					queue.offer(nr * 100 + nc);
 					visited[nr * 100 + nc] = true;
 				}
