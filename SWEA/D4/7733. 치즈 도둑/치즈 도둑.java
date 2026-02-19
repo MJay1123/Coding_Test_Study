@@ -4,7 +4,6 @@ import java.io.*;
 class Solution {
 	static int N;
 	static int[][] cheese;
-	static boolean[][] eaten;
 	static int[][] around = { { 1, 0 }, { 0, 1 }, { -1, 0 }, { 0, -1 } };
 
 	public static void main(String args[]) throws Exception {
@@ -28,7 +27,6 @@ class Solution {
 				pq.offer(day);
 			}
 			int answer = 1;
-			eaten = new boolean[N][N];
 			while(!pq.isEmpty()) {
 				int day = pq.poll();
 				eatCheese(day);
@@ -36,7 +34,7 @@ class Solution {
 				boolean[][] visited = new boolean[N][N];
 				for (int r = 0; r < N; r++) {
 					for (int c = 0; c < N; c++) {
-						if (!eaten[r][c] && !visited[r][c]) {
+						if (cheese[r][c] > 0 && !visited[r][c]) {
 							BFS(r, c, visited);
 							count++;
 						}
@@ -58,7 +56,7 @@ class Solution {
 		for (int r = 0; r < cheese.length; r++) {
 			for (int c = 0; c < cheese[0].length; c++) {
 				if (cheese[r][c] == day) {
-					eaten[r][c] = true;
+					cheese[r][c] = -1;
 				}
 			}
 		}
@@ -75,7 +73,7 @@ class Solution {
 			for (int i = 0; i < 4; i++) {
 				int nr = r + around[i][0];
 				int nc = c + around[i][1];
-				if (checkRange(nr, nc) && !eaten[nr][nc] && !visited[nr][nc]) {
+				if (checkRange(nr, nc) && cheese[nr][nc] > 0 && !visited[nr][nc]) {
 					queue.offer(nr * 100 + nc);
 					visited[nr][nc] = true;
 				}
