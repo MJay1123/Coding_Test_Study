@@ -4,6 +4,8 @@ import java.io.*;
 class Solution {
 	static int V, E;
 	static int[] tree;
+	static int[] depth;
+	static List<Integer>[] connectedTo;
 	public static void main(String args[]) throws Exception	{
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
@@ -16,12 +18,19 @@ class Solution {
 			int num1 = Integer.parseInt(st.nextToken());
 			int num2 = Integer.parseInt(st.nextToken());
 			tree = new int[V+1];
+			depth = new int[V+1];
+			connectedTo = new List[V+1];
+			for(int i=1; i<=V; i++) {
+				connectedTo[i] = new ArrayList<>();
+			}
 			st = new StringTokenizer(br.readLine());
 			for(int i=0; i<E; i++) {
 				int parent = Integer.parseInt(st.nextToken());
 				int child = Integer.parseInt(st.nextToken());
 				tree[child] = parent;
+				connectedTo[parent].add(child);
 			}
+			BFS();
 			int commonParent = getCommonParent(num1, num2);
 			int subTreeSize = getSubTreeSize(commonParent);
 			sb.append("#").append(test_case).append(" ").append(commonParent).append(" ").append(subTreeSize).append("\n");
@@ -29,23 +38,38 @@ class Solution {
 		bw.write(sb.toString());
         bw.flush();
 	}
+	public static void printArray(int[][] array) {
+		for(int r=0; r<array.length; r++) {
+			System.out.println(Arrays.toString(array[r]));
+		}
+	}
+	public static void BFS() {
+		Queue<Integer> queue = new LinkedList<>();
+		Queue<Integer> depthQueue = new LinkedList<>();
+		queue.offer(1);
+		depthQueue.offer(0);
+		while(!queue.isEmpty()) {
+			int num = queue.poll();
+			int d = depthQueue.poll();
+			depth[num] = d;
+			for(int child : connectedTo[num]) {
+				queue.offer(child);
+				depthQueue.offer(d + 1);
+			}
+		}
+	}
 	public static int getCommonParent(int num1, int num2) {
-		boolean[] visited = new boolean[V+1];
-		int n = num1;
-		while(true) {
-			n = tree[n];
-			visited[n] = true;
-			if(n == 1) {
-				break;
-			}
+		while(depth[num1] < depth[num2]) {
+			num2 = tree[num2];
 		}
-		n = num2;
-		while(true) {
-			n = tree[n];
-			if(visited[n]) {
-				return n;
-			}
+		while(depth[num1] > depth[num2]) {
+			num1 = tree[num1];
 		}
+		while(num1 != num2) {
+			num1 = tree[num1];
+			num2 = tree[num2];
+		}
+		return num1;
 	}
 	public static int getSubTreeSize(int parent) {
 		int result = 1;
