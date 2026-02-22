@@ -6,6 +6,7 @@ class Solution {
 	static int[] tree;
 	static int[] depth;
 	static List<Integer>[] connectedTo;
+	static int[] subTreeSizes;
 	public static void main(String args[]) throws Exception	{
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
@@ -20,6 +21,7 @@ class Solution {
 			tree = new int[V+1];
 			depth = new int[V+1];
 			connectedTo = new List[V+1];
+			subTreeSizes = new int[V+1];
 			for(int i=1; i<=V; i++) {
 				connectedTo[i] = new ArrayList<>();
 			}
@@ -37,11 +39,6 @@ class Solution {
 		}
 		bw.write(sb.toString());
         bw.flush();
-	}
-	public static void printArray(int[][] array) {
-		for(int r=0; r<array.length; r++) {
-			System.out.println(Arrays.toString(array[r]));
-		}
 	}
 	public static void BFS() {
 		Queue<Integer> queue = new LinkedList<>();
@@ -72,11 +69,15 @@ class Solution {
 		return num1;
 	}
 	public static int getSubTreeSize(int parent) {
+		if(subTreeSizes[parent] != 0) {
+			return subTreeSizes[parent];
+		}
+		if(connectedTo[parent].size() == 0) {
+			return 1;
+		}
 		int result = 1;
-		for(int i=1; i<=V; i++) {
-			if(tree[i] == parent) {
-				result += getSubTreeSize(i);
-			}
+		for(int child : connectedTo[parent]) {
+			result += getSubTreeSize(child);
 		}
 		return result;
 	}
