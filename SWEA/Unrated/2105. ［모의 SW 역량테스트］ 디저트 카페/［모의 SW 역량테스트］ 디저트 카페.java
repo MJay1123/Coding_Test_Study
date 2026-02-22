@@ -20,7 +20,6 @@ public class Solution {
 				}
 			}
 		 	int answer = -1;
-		 	int t = checkCircle(1, 1, 0, 1);
 		 	for(int r=0; r<N; r++) {
 		 		for(int c=0; c<N; c++) {
 		 			answer = Math.max(answer,  check(r, c));
