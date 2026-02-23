@@ -3,19 +3,11 @@ import java.io.*;
 
 public class Solution {
 	static int N;
-	static Location company;
-	static Location home;
-	static Location[] customers;
+	static int[] company;
+	static int[] home;
+	static int[][] customers;
 	static int answer;
 	static boolean[] visited;
-	static class Location {
-		int x;
-		int y;
-		public Location(int x, int y) {
-			this.x = x;
-			this.y = y;
-		}
-	}
 	public static void main(String[] args) throws IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
@@ -26,15 +18,16 @@ public class Solution {
 			StringTokenizer st = new StringTokenizer(br.readLine());
 			int cx = Integer.parseInt(st.nextToken());
 			int cy = Integer.parseInt(st.nextToken());
-			company = new Location(cx, cy);
+			company = new int[] {cx, cy};
 			int hx = Integer.parseInt(st.nextToken());
 			int hy = Integer.parseInt(st.nextToken());
-			home = new Location(hx, hy);
-			customers = new Location[N];
+			home = new int[] {hx, hy};
+			customers = new int[N][2];
 			for(int i=0; i<N; i++) {
 				int x = Integer.parseInt(st.nextToken());
 				int y = Integer.parseInt(st.nextToken());
-				customers[i] = new Location(x, y);
+				customers[i][0] = x;
+				customers[i][1] = y;
 			}
 			answer = 10000000;
 			visited = new boolean[N]; 
@@ -44,7 +37,7 @@ public class Solution {
 		bw.write(sb.toString());
 		bw.flush();
 	}
-	public static void visitCustomers(Location current, int distance, int visitedCount) {
+	public static void visitCustomers(int[] current, int distance, int visitedCount) {
 		if(visitedCount == N) {
 			int result = distance + getDistance(current, home);
 			answer = Math.min(answer, result);
@@ -58,7 +51,7 @@ public class Solution {
 			}
 		}
 	}
-	public static int getDistance(Location loc1, Location loc2) {
-		return Math.abs(loc1.x - loc2.x)+ Math.abs(loc1.y - loc2.y); 
+	public static int getDistance(int[] loc1, int[] loc2) {
+		return Math.abs(loc1[0] - loc2[0])+ Math.abs(loc1[1] - loc2[1]); 
 	}
 }
