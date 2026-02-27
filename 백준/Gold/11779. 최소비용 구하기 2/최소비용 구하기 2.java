@@ -41,7 +41,6 @@ public class Main {
 		start = Integer.parseInt(st.nextToken());
 		end = Integer.parseInt(st.nextToken());
 		gogogo();
-		List<Integer> list = new ArrayList<>();
 		bw.write(minDistance[end] + "\n");
 		bw.write(visitedCounts[end] + "\n");
 		DFS(end, bw);
