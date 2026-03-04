@@ -3,15 +3,14 @@ import java.io.*;
 
 public class Main {
 	static int N, M;
-	static List<Bridge>[] bridges;
-	static long[] capacities;
+	static HashMap<Integer, Long>[] bridges;
+	static Long[] maxCapacities;
 	static int start, end;
-	static boolean[] visited;
 	static class Bridge {
-		int end;
+		int num;
 		long capacity;
-		public Bridge(int end, long capacity) {
-			this.end = end;
+		public Bridge(int num, long capacity) {
+			this.num = num;
 			this.capacity = capacity;
 		}
 	}
@@ -21,77 +20,62 @@ public class Main {
 		StringTokenizer st = new StringTokenizer(br.readLine());
 		N = Integer.parseInt(st.nextToken());
 		M = Integer.parseInt(st.nextToken());
-		bridges = new List[N+1];
+		bridges = new HashMap[N+1];
 		for(int i=1; i<=N; i++) {
-			bridges[i] = new ArrayList<>();
+			bridges[i] = new HashMap<>();
 		}
 		for(int i=0; i<M; i++) {
 			st = new StringTokenizer(br.readLine());
 			int A = Integer.parseInt(st.nextToken());
 			int B = Integer.parseInt(st.nextToken());
 			long C = Long.parseLong(st.nextToken());
-			putInBridgeList(A, B, C);
+			bridges[A].put(B, Math.max(bridges[A].getOrDefault(B, 0L), C));
+			bridges[B].put(A, Math.max(bridges[B].getOrDefault(A, 0L), C));
 		}
 		st = new StringTokenizer(br.readLine());
 		start = Integer.parseInt(st.nextToken());
 		end = Integer.parseInt(st.nextToken());
 		dijkstra();
-		bw.write(capacities[end] + "\n");
+		bw.write(maxCapacities[end] + "\n");
 		bw.flush();
 	}
 	public static void dijkstra() {
-		capacities = new long[N+1];
+		maxCapacities = new Long[N+1];
 		PriorityQueue<Bridge> pq = new PriorityQueue<>(new Comparator<Bridge>(){
 			@Override
 			public int compare(Bridge o1, Bridge o2) {
-				return (int)(o2.capacity - o1.capacity);
+				if(o1.capacity > o2.capacity) {
+					return -1;
+				}
+				return 1;
 			}
 		});
-		visited = new boolean[N+1];
-		for(Bridge b : bridges[start]) {
-			pq.offer(b);
-			capacities[b.end] = b.capacity; 
+		boolean[] visited = new boolean[N+1];
+		for(int num : bridges[start].keySet()) {
+			long capacity = bridges[start].get(num);
+			pq.offer(new Bridge(num, capacity));
+			maxCapacities[num] = capacity;
 		}
 		visited[start] = true;
 		while(!pq.isEmpty()) {
-			Bridge b = pq.poll();
-			int current = b.end;
-			visited[current] = true;
-			if(current == end) {
-				return;
-			}
-			for(Bridge nb : bridges[current]) {
-				int next = nb.end;
-				long nc = Math.min(nb.capacity, capacities[current]);
-				if(!visited[next] && capacities[next] < nc) {
-					capacities[next] = nc;
-					pq.offer(nb);
+			Bridge current = pq.poll();
+			int cn = current.num;
+			long cc = current.capacity;
+			if(!visited[cn]) {
+				visited[cn] = true;
+				if(cn == end) {
+					return;
+				}
+				for(int nn : bridges[cn].keySet()) {
+					long nc = bridges[cn].get(nn);
+					if(!visited[nn]) {
+						if(maxCapacities[nn] == null || maxCapacities[nn] < Math.min(cc, nc)) {
+							maxCapacities[nn] = Math.min(cc, nc);
+							pq.offer(new Bridge(nn, maxCapacities[nn]));
+						}
+					}
 				}
 			}
-		}
-	}
-	public static void putInBridgeList(int A, int B, long C) {
-		int index = -1;
-		for(int j=0; j<bridges[A].size(); j++) {
-			if(bridges[A].get(j).end == B) {
-				bridges[A].get(j).capacity = Math.max(bridges[A].get(j).capacity, C);
-				index = j;
-				break;
-			}
-		}
-		if(index == -1) {
-			bridges[A].add(new Bridge(B, C));
-		}
-		index = -1;
-		for(int j=0; j<bridges[B].size(); j++) {
-			if(bridges[B].get(j).end == A) {
-				bridges[B].get(j).capacity = Math.max(bridges[B].get(j).capacity, C);
-				index = j;
-				break;
-			}
-		}
-		if(index == -1) {
-			bridges[B].add(new Bridge(A, C));
 		}
 	}
 }
