@@ -47,6 +47,7 @@ public class Solution {
 	public static void goToNext(int visitedCount, int distance, Location current) {
 		if(visitedCount == N) {
 			answer = Math.min(answer, distance + getDistance(current, home));
+			return;
 		}
 		for(int i=0; i<N; i++) {
 			if(!visited[i]) {
