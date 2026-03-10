@@ -2,10 +2,18 @@ import java.util.*;
 import java.io.*;
 
 public class Solution {
+	static class Location {
+		int x;
+		int y;
+		public Location(int x, int y) {
+			this.x = x;
+			this.y = y;
+		}
+	}
 	static int N;
-	static int[] company;
-	static int[] home;
-	static int[][] customers;
+	static Location home;
+	static Location company;
+	static Location[] customers;
 	static int answer;
 	static boolean[] visited;
 	public static void main(String[] args) throws IOException {
@@ -16,42 +24,39 @@ public class Solution {
 		for(int testCase=1; testCase<=T; testCase++) {
 			N = Integer.parseInt(br.readLine());
 			StringTokenizer st = new StringTokenizer(br.readLine());
-			int cx = Integer.parseInt(st.nextToken());
-			int cy = Integer.parseInt(st.nextToken());
-			company = new int[] {cx, cy};
-			int hx = Integer.parseInt(st.nextToken());
-			int hy = Integer.parseInt(st.nextToken());
-			home = new int[] {hx, hy};
-			customers = new int[N][2];
+			int x = Integer.parseInt(st.nextToken());
+			int y = Integer.parseInt(st.nextToken());
+			company = new Location(x, y);
+			x = Integer.parseInt(st.nextToken());
+			y = Integer.parseInt(st.nextToken());
+			home = new Location(x, y);
+			customers = new Location[N];
 			for(int i=0; i<N; i++) {
-				int x = Integer.parseInt(st.nextToken());
-				int y = Integer.parseInt(st.nextToken());
-				customers[i][0] = x;
-				customers[i][1] = y;
+				x = Integer.parseInt(st.nextToken());
+				y = Integer.parseInt(st.nextToken());
+				customers[i] = new Location(x, y); 
 			}
 			answer = 10000000;
-			visited = new boolean[N]; 
-			visitCustomers(company, 0, 0);
+			visited = new boolean[N];
+			goToNext(0, 0, company);
 			sb.append("#").append(testCase).append(" ").append(answer).append("\n");
 		}
 		bw.write(sb.toString());
 		bw.flush();
 	}
-	public static void visitCustomers(int[] current, int distance, int visitedCount) {
+	public static void goToNext(int visitedCount, int distance, Location current) {
 		if(visitedCount == N) {
-			int result = distance + getDistance(current, home);
-			answer = Math.min(answer, result);
-			return;
+			answer = Math.min(answer, distance + getDistance(current, home));
 		}
 		for(int i=0; i<N; i++) {
 			if(!visited[i]) {
 				visited[i] = true;
-				visitCustomers(customers[i], distance + getDistance(current, customers[i]), visitedCount+1);
+				goToNext(visitedCount+1, distance + getDistance(current, customers[i]), customers[i]);
 				visited[i] = false;
 			}
 		}
 	}
-	public static int getDistance(int[] loc1, int[] loc2) {
-		return Math.abs(loc1[0] - loc2[0])+ Math.abs(loc1[1] - loc2[1]); 
+	public static int getDistance(Location loc1, Location loc2) {
+		return Math.abs(loc1.x - loc2.x) + Math.abs(loc1.y - loc2.y); 
 	}
 }
