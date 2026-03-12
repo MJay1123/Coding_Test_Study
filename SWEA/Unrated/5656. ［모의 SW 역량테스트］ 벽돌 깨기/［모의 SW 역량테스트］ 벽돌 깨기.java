@@ -38,7 +38,7 @@ public class Solution {
             }
 
             dfs(0, map, topNumArr);
-            sb.append("#").append(tc).append(" ").append(answer == Integer.MAX_VALUE ? 0 : answer).append("\n");
+            sb.append("#").append(tc).append(" ").append(answer).append("\n");
         }
         System.out.print(sb);
     }
@@ -47,9 +47,7 @@ public class Solution {
         int count = 0;
         for (int i = 0; i < W; i++) {
             if (currentTop[i] != -1) {
-                for (int j = 0; j <= currentTop[i]; j++) {
-                    if (currentMap[i][j] != 0) count++;
-                }
+                count += currentTop[i]+1;
             }
         }
 
