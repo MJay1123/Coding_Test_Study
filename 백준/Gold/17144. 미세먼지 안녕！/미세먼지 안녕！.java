@@ -9,16 +9,6 @@ public class Main {
 	public static boolean checkRange(int r, int c) {
 		return r >= 0 && r < R && c >= 0 && c < C && map[r][c] != -1;
 	}
-	static class Dust {
-		int r;
-		int c;
-		int amount;
-		public Dust(int r, int c, int amount) {
-			this.r = r;
-			this.c = c;
-			this.amount = amount;
-		}
-	}
 	public static void main(String[] args) throws IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
@@ -55,7 +45,7 @@ public class Main {
 		bw.write(answer + "\n");
 		bw.flush();
 	}
-
+	
 	public static void cleanAir() {
 		int r1 = Math.min(airCleaner[0], airCleaner[1]);
 		for(int r=r1 - 1; r>0; r--) {
