@@ -21,7 +21,8 @@ public class Main {
 		sum = Math.abs(sum);
 		double answer = sum / 2.0;
 		answer = Math.round(answer * 10) / 10.0;
-		System.out.printf("%.1f\n", answer);
+		bw.write(String.format("%.1f\n", answer));
+		bw.flush();
 	}
 
 	public static long getTriangle(long x1, long y1, long x2, long y2, long x3, long y3) {
