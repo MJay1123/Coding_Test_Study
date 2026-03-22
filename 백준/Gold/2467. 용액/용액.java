@@ -13,32 +13,27 @@ public class Main {
 		for(int i=0; i<N; i++) {
 			liquids[i] = Long.parseLong(st.nextToken());
 		}
-		int[] result = {0, N-1};
-		int left = 0;
-		int right = N-1;
-		long sum = liquids[left] + liquids[right];
-		long min = Math.abs(sum);
-		while(left < right) {
-//			System.out.println("left : " + left + ", right : " + right);
+		int leftIndex = 0;
+		int rightIndex = N-1;
+		long min = Long.MAX_VALUE;
+		long left = 0L;
+		long right = 0L;
+		while(leftIndex < rightIndex) {
+			long sum = liquids[leftIndex] + liquids[rightIndex];
+			if(Math.abs(min) >= Math.abs(sum)) {
+				min = sum;
+				left = liquids[leftIndex];
+				right = liquids[rightIndex];
+			}
 			if(sum > 0) {
-				right--;
+				rightIndex--;
 			} else if(sum < 0) {
-				left++;
+				leftIndex++;
 			} else {
 				break;
 			}
-			if(left == right) {
-				break;
-			}
-			sum = liquids[left] + liquids[right];
-			if(min >= Math.abs(sum)) {
-				min = Math.abs(sum);
-				result[0] = left;
-				result[1] = right;
-			}
 		}
-		bw.write(liquids[result[0]] + " " + liquids[result[1]] + "\n");
+		bw.write(left + " " + right + "\n");
 		bw.flush();
 	}
-
 }
