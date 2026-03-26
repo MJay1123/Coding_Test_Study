@@ -1,0 +1,19 @@
+SELECT
+    COUNT(ID) AS FISH_COUNT,
+    MAX(LENGTH) AS MAX_LENGTH,
+    fi.FISH_TYPE
+FROM FISH_INFO fi
+JOIN(
+    SELECT
+        FISH_TYPE
+    FROM FISH_INFO
+    GROUP BY FISH_TYPE
+    HAVING AVG(
+            CASE
+                WHEN LENGTH IS NULL THEN 10
+                ELSE LENGTH
+            END
+            ) >= 33
+    ) sq ON fi.FISH_TYPE = sq.FISH_TYPE
+GROUP BY fi.FISH_TYPE
+ORDER BY fi.FISH_TYPE ASC;
