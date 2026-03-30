@@ -1,0 +1,15 @@
+WITH REVIEW_COUNT AS (SELECT
+                            COUNT(REVIEW_ID) AS REVIEW_COUNT,
+                            MEMBER_ID
+                      FROM REST_REVIEW
+                      GROUP BY MEMBER_ID
+                      ORDER BY REVIEW_COUNT DESC
+                      LIMIT 1)
+SELECT
+    MEMBER_NAME,
+    REVIEW_TEXT,
+    DATE_FORMAT(REVIEW_DATE, '%Y-%m-%d') AS REVIEW_DATE
+FROM REST_REVIEW rr
+JOIN MEMBER_PROFILE mp ON rr.MEMBER_ID = mp.MEMBER_ID
+JOIN REVIEW_COUNT rc ON rr.MEMBER_ID = rc.MEMBER_ID
+ORDER BY REVIEW_DATE ASC, REVIEW_TEXT ASC;
