@@ -3,16 +3,6 @@ import java.io.*;
 
 public class Main {
 	static int N, M;
-	static class Basket {
-		int x;
-		int y;
-		int candy;
-		public Basket(int x, int y, int candy) {
-			this.x = x;
-			this.y = y;
-			this.candy = candy;
-		}
-	}
 	static int[][] map;
 	public static void main(String[] args) throws IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -21,12 +11,10 @@ public class Main {
 		N = Integer.parseInt(st.nextToken());
 		M = Integer.parseInt(st.nextToken());
 		map = new int[301][301];
-		List<Basket> list = new ArrayList<>();
 		for(int i=0; i<N; i++) {
 			st = new StringTokenizer(br.readLine());
 			int x = Integer.parseInt(st.nextToken());
 			int y = Integer.parseInt(st.nextToken());
-			list.add(new Basket(x, y, M));
 			map[x][y] = M;
 		}
 		int[][] dp = new int[301][301];
