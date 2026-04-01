@@ -3,7 +3,6 @@ import java.io.*;
 
 public class Main {
 	static int N, M;
-//	static List<Connection>[] connections;
 	static Road[] roads;
 	static class Road implements Comparable<Road> {
 		int num1;
@@ -38,11 +37,9 @@ public class Main {
 		StringTokenizer st = new StringTokenizer(br.readLine());
 		N = Integer.parseInt(st.nextToken());
 		M = Integer.parseInt(st.nextToken());
-//		connections = new List[N+1];
 		roads = new Road[M];
 		parents = new int[N+1];
 		for(int i=1; i<=N; i++) {
-//			connections[i] = new ArrayList<>();
 			parents[i] = i;
 		}
 		for(int i=0; i<M; i++) {
@@ -50,12 +47,9 @@ public class Main {
 			int A = Integer.parseInt(st.nextToken());
 			int B = Integer.parseInt(st.nextToken());
 			int C = Integer.parseInt(st.nextToken());
-//			connections[A].add(new Connection(B, C));
-//			connections[B].add(new Connection(A, C));
 			roads[i] = new Road(A, B, C);
 		}
 		Arrays.sort(roads);
-		int roadCount = 0;
 		int groupCount = N;
 		int costSum = 0;
 		for(int i=0; i<M; i++) {
@@ -68,7 +62,6 @@ public class Main {
 			int cost = r.cost;
 			if(union(num1, num2)) {
 				costSum += cost;
-				roadCount++;
 				groupCount--;
 			}
 		}
