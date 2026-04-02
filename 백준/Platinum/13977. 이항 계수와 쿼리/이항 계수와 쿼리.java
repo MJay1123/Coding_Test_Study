@@ -4,7 +4,7 @@ import java.io.*;
 public class Main {
 	static int M, N, K;
 	static long MOD = 1000000007;
-	static long[] factorials = new long[40000001];
+	static long[] factorials = new long[4000001];
 	public static void main(String[] args) throws IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
