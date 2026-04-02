@@ -4,6 +4,7 @@ import java.io.*;
 public class Main {
 	static int N, K;
 	static long MOD = 1000000007;
+	static long[] factorials = new long[40000000];
 	public static void main(String[] args) throws IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
@@ -29,9 +30,14 @@ public class Main {
 		}
 	}
 	public static long factorial(long n) {
-		if(n == 0) {
-			return 1;
+		int in = (int)n;
+		if(factorials[in] == 0) {
+			if(in == 0) {
+				factorials[in] = 1;
+			} else {
+				factorials[in] = factorial(n-1) * n % MOD;
+			}
 		}
-		return factorial(n-1) * n % MOD;
+		return factorials[in];
 	}
 }
