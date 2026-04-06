@@ -9,10 +9,12 @@ public class Main {
 		int num;
 		int visit;
 		int dist;
-		public Node(int num, int visit, int dist) {
+		int start;
+		public Node(int num, int visit, int dist, int start) {
 			this.num = num;
 			this.visit = visit;
 			this.dist = dist;
+			this.start = start;
 		}
 		@Override
 		public int compareTo(Node n) {
@@ -38,34 +40,39 @@ public class Main {
 		PriorityQueue<Node> pq = new PriorityQueue<>();
 		answer = 1000000000;
 		for(int start=0; start<N; start++) {
-			pq.offer(new Node(start, 1 << start, 0));
+			pq.offer(new Node(start, 1 << start, 0, start));
 			dp[start][(1 << start)] = 0;
-			while(!pq.isEmpty()) {
-				Node n = pq.poll();
-				int cn = n.num;
-				int cv = n.visit;
-				int cd = n.dist;
-				if(cv == ((1 << N) - 1)) {
-					if(W[cn][start] != 0) {
-						answer = Math.min(answer, cd + W[cn][start]);
+		}
+		while(!pq.isEmpty()) {
+			Node n = pq.poll();
+			int cn = n.num;
+			int cv = n.visit;
+			int cd = n.dist;
+			int start = n.start;
+			if(cv == -1) {
+				answer = cd;
+				break;
+			}
+			if(cv == ((1 << N) - 1)) {
+				if(W[cn][start] != 0) {
+					pq.offer(new Node(start, -1, cd + W[cn][start], start));
+				}
+			} else {
+				for(int nn=0; nn<N; nn++) {
+					if(nn == start) {
+						continue;
 					}
-				} else {
-					for(int nn=0; nn<N; nn++) {
-						if(nn == start) {
-							continue;
-						}
-						if((cv & (1 << nn)) > 0) {
-							continue;
-						}
-						if(W[cn][nn] == 0) {
-							continue;
-						}
-						int nv = cv | (1 << nn);
-						int nd = cd + W[cn][nn];
-						if(dp[nn][nv] > nd) {
-							dp[nn][nv] = nd;
-							pq.offer(new Node(nn, nv, nd));
-						}
+					if((cv & (1 << nn)) > 0) {
+						continue;
+					}
+					if(W[cn][nn] == 0) {
+						continue;
+					}
+					int nv = cv | (1 << nn);
+					int nd = cd + W[cn][nn];
+					if(dp[nn][nv] > nd) {
+						dp[nn][nv] = nd;
+						pq.offer(new Node(nn, nv, nd, start));
 					}
 				}
 			}
