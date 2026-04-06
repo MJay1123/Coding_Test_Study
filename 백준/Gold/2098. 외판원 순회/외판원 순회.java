@@ -5,6 +5,20 @@ public class Main {
 	static int N;
 	static int[][] W;
 	static int answer;
+	static class Node implements Comparable<Node> {
+		int num;
+		int visit;
+		int dist;
+		public Node(int num, int visit, int dist) {
+			this.num = num;
+			this.visit = visit;
+			this.dist = dist;
+		}
+		@Override
+		public int compareTo(Node n) {
+			return this.dist - n.dist;
+		}
+	}
 	public static void main(String[] args) throws IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
@@ -21,41 +35,36 @@ public class Main {
 		for(int i=0; i<N; i++) {
 			Arrays.fill(dp[i], 100000000);							
 		}
-		Queue<Integer> numQueue = new LinkedList<>();
-		Queue<Integer> visitQueue = new LinkedList<>();
-		for(int i=0; i<N; i++) {
-			dp[i][(1 << i)] = 0;
-			numQueue.offer(i);
-			visitQueue.offer(1 << i);
-		}
+		PriorityQueue<Node> pq = new PriorityQueue<>();
 		answer = 1000000000;
 		for(int start=0; start<N; start++) {
+			pq.offer(new Node(start, 1 << start, 0));
 			dp[start][(1 << start)] = 0;
-			numQueue.offer(start);
-			visitQueue.offer(1 << start);
-			while(!numQueue.isEmpty()) {
-				int cn = numQueue.poll();
-				int cv = visitQueue.poll();
-				if(cv == (1 << N) - 1) {
+			while(!pq.isEmpty()) {
+				Node n = pq.poll();
+				int cn = n.num;
+				int cv = n.visit;
+				int cd = n.dist;
+				if(cv == ((1 << N) - 1)) {
 					if(W[cn][start] != 0) {
-						answer = Math.min(answer, dp[cn][cv] + W[cn][start]);
+						answer = Math.min(answer, cd + W[cn][start]);
 					}
 				} else {
 					for(int nn=0; nn<N; nn++) {
 						if(nn == start) {
-							continue;	// 시작점 x
+							continue;
 						}
 						if((cv & (1 << nn)) > 0) {
-							continue;	// 이미 방문한 경우
+							continue;
 						}
 						if(W[cn][nn] == 0) {
-							continue;	// 갈 수 없는 경우
+							continue;
 						}
 						int nv = cv | (1 << nn);
-						if(dp[nn][nv] > dp[cn][cv] + W[cn][nn]) {
-							dp[nn][nv] = dp[cn][cv] + W[cn][nn];
-							numQueue.offer(nn);
-							visitQueue.offer(nv);
+						int nd = cd + W[cn][nn];
+						if(dp[nn][nv] > nd) {
+							dp[nn][nv] = nd;
+							pq.offer(new Node(nn, nv, nd));
 						}
 					}
 				}
