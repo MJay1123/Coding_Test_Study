@@ -1,0 +1,16 @@
+WITH USER_COUNT AS (SELECT
+                        USER_ID,
+                        YEAR(SALES_DATE) AS YEAR,
+                        MONTH(SALES_DATE) AS MONTH
+                    FROM ONLINE_SALE
+                    GROUP BY USER_ID, YEAR, MONTH)
+SELECT
+    uc.YEAR,
+    uc.MONTH,
+    ui.GENDER AS GENDER,
+    COUNT(uc.USER_ID) AS USERS
+FROM USER_COUNT uc
+JOIN USER_INFO ui ON uc.USER_ID = ui.USER_ID
+WHERE ui.GENDER IS NOT NULL
+GROUP BY YEAR, MONTH, GENDER
+ORDER BY YEAR ASC, MONTH ASC, GENDER ASC;
