@@ -31,6 +31,9 @@ public class Solution {
 		bw.flush();
 	}
 	public static void combination(int r, int count) {
+		if(count > K) {
+			return;
+		}
 		if(r == D) {
 			if(check()) {
 				answer = Math.min(answer, count);
