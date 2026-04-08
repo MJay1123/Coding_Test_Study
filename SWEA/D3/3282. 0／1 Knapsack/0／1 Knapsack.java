@@ -31,9 +31,6 @@ public class Solution {
 		}
 		bw.write(sb.toString());
 		bw.flush();
-//		for(int r=0; r<=N; r++) {
-//			System.out.println(Arrays.toString(dp[r]));
-//		}
 	}
 	public static int getDP(int index, int volume) {
 		if(index > N || volume > K) {
