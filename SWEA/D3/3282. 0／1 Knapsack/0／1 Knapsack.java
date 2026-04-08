@@ -22,31 +22,30 @@ public class Solution {
 				V[i] = Integer.parseInt(st.nextToken());
 				C[i] = Integer.parseInt(st.nextToken());
 			}
+			int answer = 0;
 			dp = new int[N+1][K+1];
-			for(int i=0; i<=N; i++) {
-				Arrays.fill(dp[i], -1);
+			for(int i=1; i<=N; i++) {
+				if(V[i] <= K) {
+					dp[i][V[i]] = Math.max(dp[i][V[i]], C[i]);
+					answer = Math.max(answer,  dp[i][V[i]]);
+				}
 			}
-			int answer = getDP(0, 0);
+			for(int r=1; r<=N; r++) {
+				for(int c=0; c<=K; c++) {
+					if(dp[r][c] > 0) {
+						for(int i=r+1; i<=N; i++) {
+							if(c + V[i] <= K) {
+								dp[i][c+V[i]] = Math.max(dp[i][c+V[i]], dp[r][c] + C[i]);
+								answer = Math.max(answer, dp[i][c+V[i]]);
+							}
+						}
+					}
+				}
+			}
 			sb.append("#").append(testCase).append(" ").append(answer).append("\n");
 		}
 		bw.write(sb.toString());
 		bw.flush();
 	}
-	public static int getDP(int index, int volume) {
-		if(index > N || volume > K) {
-			return 0;
-		}
-		if(dp[index][volume] == -1) {
-			int temp = 0;
-			for(int i=index+1; i<=N; i++) {
-				int v = V[i];
-				int c = C[i];
-				if(volume + v <= K) {
-					temp = Math.max(temp, getDP(i, volume + v) + c);
-				}
-			}
-			dp[index][volume] = temp;
-		}
-		return dp[index][volume];
-	}
+
 }
