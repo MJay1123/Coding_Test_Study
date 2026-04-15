@@ -29,13 +29,15 @@ public class Solution {
 			int answer = 0;
 			for(int start=1; start<=N; start++) {
 				boolean[] visited = new boolean[N+1];
+				int visitCount = 0;
 				Queue<Integer> numQueue = new LinkedList<>();
 				Queue<Integer> directionQueue = new LinkedList<>();
-				visited[start] = true;
 				numQueue.offer(start);
 				numQueue.offer(start);
 				directionQueue.offer(-1);
-				directionQueue.offer(1);				
+				directionQueue.offer(1);
+				visited[start] = true;
+				visitCount++;
 				while(!numQueue.isEmpty()) {
 					int current = numQueue.poll();
 					int direction = directionQueue.poll();
@@ -45,6 +47,7 @@ public class Solution {
 								numQueue.offer(next);
 								directionQueue.offer(-1);
 								visited[next] = true;
+								visitCount++;
 							}
 						}
 					} else {
@@ -53,18 +56,12 @@ public class Solution {
 								numQueue.offer(next);
 								directionQueue.offer(1);
 								visited[next] = true;
+								visitCount++;
 							}
 						}
 					}
 				}
-				boolean know = true;
-				for(int i=1; i<=N; i++) {
-					if(!visited[i]) {
-						know = false;
-						break;
-					}
-				}
-				if(know) {
+				if(visitCount == N) {
 					answer++;
 				}
 			}
