@@ -1,70 +1,76 @@
 import java.util.*;
 import java.io.*;
 
-class Solution {
-	public static void main(String args[]) throws Exception	{
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+public class Solution {
+	static int N, M;
+	static List<Integer>[] connectedFrom;
+	static List<Integer>[] connectedTo;
+	public static void main(String[] args) throws IOException {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+		StringBuilder sb = new StringBuilder();
 		int T = Integer.parseInt(br.readLine());
-		for(int test_case = 1; test_case <= T; test_case++) {
-            int N = Integer.parseInt(br.readLine());
-            int M = Integer.parseInt(br.readLine());
-            Person[] people = new Person[N+1];
-            for(int i=1; i<=N; i++){
-                people[i] = new Person(i);
-            }
-            for(int i=0; i<M; i++){
-                StringTokenizer st = new StringTokenizer(br.readLine());
-                int child = Integer.parseInt(st.nextToken());
-                int parent = Integer.parseInt(st.nextToken());
-                people[child].parents.add(parent);
-                people[parent].children.add(child);
-            }
-            int answer = 0;
-            for(int i=1; i<=N; i++){
-                boolean[] visited = new boolean[N+1];
-            	int parentCount = pDFS(i, people, visited);
-                visited = new boolean[N+1];
-                int childCount = cDFS(i, people, visited);
-                if(parentCount - 1 + childCount - 1 == N-1){
-                    answer++;
-                }
-            }
-			StringBuilder sb = new StringBuilder();
-            sb.append("#").append(test_case).append(" ").append(answer).append("\n");
-            bw.write(sb.toString());
+		for(int testCase=1; testCase<=T; testCase++) {
+			N = Integer.parseInt(br.readLine());
+			M = Integer.parseInt(br.readLine());
+			connectedFrom = new List[N+1];
+			connectedTo= new List[N+1];
+			for(int i=1; i<=N; i++) {
+				connectedFrom[i] = new ArrayList<>();
+				connectedTo[i] = new ArrayList<>();
+			}
+			for(int i=0; i<M; i++) {
+				StringTokenizer st = new StringTokenizer(br.readLine());
+				int a = Integer.parseInt(st.nextToken());
+				int b = Integer.parseInt(st.nextToken());
+				connectedTo[a].add(b);
+				connectedFrom[b].add(a);
+			}
+			int answer = 0;
+			for(int start=1; start<=N; start++) {
+				boolean[] visited = new boolean[N+1];
+				Queue<Integer> numQueue = new LinkedList<>();
+				Queue<Integer> directionQueue = new LinkedList<>();
+				visited[start] = true;
+				numQueue.offer(start);
+				numQueue.offer(start);
+				directionQueue.offer(-1);
+				directionQueue.offer(1);				
+				while(!numQueue.isEmpty()) {
+					int current = numQueue.poll();
+					int direction = directionQueue.poll();
+					if(direction == -1) {
+						for(int next : connectedFrom[current]) {
+							if(!visited[next]) {
+								numQueue.offer(next);
+								directionQueue.offer(-1);
+								visited[next] = true;
+							}
+						}
+					} else {
+						for(int next : connectedTo[current]) {
+							if(!visited[next]) {
+								numQueue.offer(next);
+								directionQueue.offer(1);
+								visited[next] = true;
+							}
+						}
+					}
+				}
+				boolean know = true;
+				for(int i=1; i<=N; i++) {
+					if(!visited[i]) {
+						know = false;
+						break;
+					}
+				}
+				if(know) {
+					answer++;
+				}
+			}
+			sb.append("#").append(testCase).append(" ").append(answer).append("\n");
 		}
-        bw.flush();
+		bw.write(sb.toString());
+		bw.flush();
 	}
-    public static int pDFS(int num, Person[] people, boolean[] visited){
-        visited[num] = true;
-        int count = 1;
-        for(int next : people[num].parents){
-            if(!visited[next]){
-                count += pDFS(next, people, visited);
-            }
-        }
-        return count;
-    }
-    public static int cDFS(int num, Person[] people, boolean[] visited){
-        visited[num] = true;
-        int count = 1;
-        for(int next : people[num].children){
-            if(!visited[next]){
-                count += cDFS(next, people, visited);
-            }
-        }
-        return count;
-    }
-    static class Person {
-        int number;
-        List<Integer> parents;
-        List<Integer> children;
-        
-        public Person(int number) {
-            this.number = number;
-            this.parents = new ArrayList<>();
-            this.children = new ArrayList<>();
-        }
-    }
 }
