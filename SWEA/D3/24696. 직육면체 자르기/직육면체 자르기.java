@@ -12,11 +12,10 @@ public class Solution {
 			int A = Integer.parseInt(st.nextToken());
 			int B = Integer.parseInt(st.nextToken());
 			int C = Integer.parseInt(st.nextToken());
-			long temp = 1L * A * B * C;
-			if(temp % 2 == 1) {
-				sb.append(2);
-			} else {
+			if(A % 2 == 0 || B % 2 == 0 || C % 2 == 0) {
 				sb.append(1);
+			} else {
+				sb.append(2);
 			}
 			sb.append("\n");
 		}
