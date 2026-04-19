@@ -4,6 +4,7 @@ import java.io.*;
 public class Solution {
 	static int n, m;
 	static int[][] chocolate;
+	static int[][] sumChocolate;
 	static long[][][][] dp;
 	public static void main(String[] args) throws IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -21,6 +22,17 @@ public class Solution {
 					chocolate[r][c] = Integer.parseInt(st.nextToken());
 				}
 			}
+			sumChocolate = new int[n+1][m+1];
+			for(int r=1; r<=n; r++) {
+				for(int c=1; c<=m; c++) {
+					sumChocolate[r][c] = sumChocolate[r][c-1] + chocolate[r-1][c-1];
+				}				
+			}
+			for(int r=1; r<=n; r++) {
+				for(int c=1; c<=m; c++) {
+					sumChocolate[r][c] += sumChocolate[r-1][c];
+				}
+			}
 			dp = new long[n][m][n][m];
 			long answer = getDP(0, 0, n-1, m-1);
 			sb.append(String.format("#%d %d\n", testCase, answer));
@@ -33,12 +45,7 @@ public class Solution {
 			return 0;
 		} else {
 			if(dp[sr][sc][er][ec] == 0) {
-				long sum = 0;
-				for(int r=sr; r<=er; r++) {
-					for(int c=sc; c<=ec; c++) {
-						sum += chocolate[r][c];
-					}
-				}
+				long sum = sumChocolate[er+1][ec+1] - sumChocolate[er+1][sc] - sumChocolate[sr][ec+1] + sumChocolate[sr][sc];
 				long minimum = Long.MAX_VALUE;
 				for(int r=sr; r<er; r++) {
 					long result = getDP(sr, sc, r, ec) + getDP(r+1, sc, er, ec);
