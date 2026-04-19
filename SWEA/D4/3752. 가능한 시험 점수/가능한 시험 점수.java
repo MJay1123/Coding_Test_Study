@@ -16,19 +16,21 @@ public class Solution {
 			for(int i=0; i<N; i++) {
 				scores[i] = Integer.parseInt(st.nextToken());
 			}
-			Set<Integer>[] sets = new Set[N];
+			boolean[] dp = new boolean[10001];
+			int answer = 0;
+			dp[0] = true;
+			answer++;
 			for(int i=0; i<N; i++) {
-				sets[i] = new HashSet<>();
-			}
-			sets[0].add(0);
-			sets[0].add(scores[0]);
-			for(int i=1; i<N; i++) {
-				for(int prevScore : sets[i-1]) {
-					sets[i].add(prevScore);
-					sets[i].add(prevScore + scores[i]);
+				int score = scores[i];
+				for(int prev = 10000; prev>=0; prev--) {
+					if(dp[prev]) {
+						if(prev + score <= 10000 && !dp[prev + score]) {
+							answer++;
+							dp[prev + score] = true;
+						}
+					}
 				}
 			}
-			int answer = sets[N-1].size();
 			sb.append(String.format("#%d %d\n", testCase, answer));
 		}
 		bw.write(sb.toString());
