@@ -16,22 +16,17 @@ public class Solution {
 			for(int i=0; i<N; i++) {
 				scores[i] = Integer.parseInt(st.nextToken());
 			}
-			boolean[][] dp = new boolean[N][10001];
-			dp[0][0] = true;
-			dp[0][scores[0]] = true;
+			boolean[] dp = new boolean[10001];
+			dp[0] = true;
+			dp[scores[0]] = true;
+			int answer = 2;
 			for(int i=1; i<N; i++) {
-				int score = scores[i];
-				for(int prev = 0; prev <=10000; prev++){
-					if(dp[i-1][prev]) {
-						dp[i][prev] = true;
-						dp[i][prev + score] = true;
+				for(int prev=10000; prev>=0; prev--) {
+					int score = scores[i];
+					if(dp[prev] && prev + score <= 10000 && !dp[prev + score]) {
+						answer++;
+						dp[prev + score] = true;
 					}
-				}
-			}
-			int answer = 0;
-			for(int i=0; i<=10000; i++) {
-				if(dp[N-1][i]) {
-					answer++;
 				}
 			}
 			sb.append(String.format("#%d %d\n", testCase, answer));
