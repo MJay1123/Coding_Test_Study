@@ -3,9 +3,8 @@ import java.io.*;
 public class Solution {
     static int length;
     static String str;
-    static List<Stack<Integer>> nsl;	// number stack list
-    static List<Stack<Character>> csl;	// calculation stack list
-    static int index;
+    static Stack<Stack<Integer>> nss;	// number stack stack
+    static Stack<Stack<Character>> css;	// calculation stack stack
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
@@ -13,19 +12,17 @@ public class Solution {
         for(int tc=1; tc<=10; tc++){
             length = Integer.parseInt(br.readLine());
             str = br.readLine();
-            nsl = new ArrayList<>();
-            csl = new ArrayList<>();
-            nsl.add(new Stack<>());
-            csl.add(new Stack<>());
-            index = 0;
+            nss = new Stack<>();
+            css = new Stack<>();
+            nss.add(new Stack<>());
+            css.add(new Stack<>());
             for(int i=0; i<str.length(); i++){
                 char ch = str.charAt(i);
-                Stack<Integer> ns = nsl.get(index);		// number stack
-                Stack<Character> cs = csl.get(index);	// calculation stack
+                Stack<Integer> ns = nss.peek();		// number stack
+                Stack<Character> cs = css.peek();	// calculation stack
                 if(ch == '('){
-                    nsl.add(new Stack<>());
-                    csl.add(new Stack<>());
-                    index++;
+                    nss.push(new Stack<>());
+                    css.push(new Stack<>());
                 } else if(ch == ')'){
                     while(!cs.isEmpty()){
                         int num2 = ns.pop();
@@ -34,9 +31,8 @@ public class Solution {
          				ns.push(calculate(num1, num2, calc));
                     }
 					int result = ns.pop();
-                    nsl.remove(index);
-                    csl.remove(index);
-                    index--;
+                    nss.pop();
+                    css.pop();
                     addNumber(result);
                 } else if(ch == '*' || ch == '+'){
                     cs.push(ch);
@@ -45,7 +41,7 @@ public class Solution {
                     addNumber(num2);
                 }
             }
-            int answer = nsl.get(0).peek();
+            int answer = nss.peek().peek();
             sb.append(String.format("#%d %d\n", tc, answer));
         }
         bw.write(sb.toString());
@@ -53,8 +49,8 @@ public class Solution {
     }
     
     public static void addNumber(int num2) {
-    	Stack<Integer> ns = nsl.get(index);
-    	Stack<Character> cs = csl.get(index);
+    	Stack<Integer> ns = nss.peek();
+    	Stack<Character> cs = css.peek();
     	if(cs.isEmpty()){
             ns.push(num2);
         } else if(cs.peek() == '*'){
