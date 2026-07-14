@@ -16,6 +16,7 @@ public class Solution {
             for(int i=0; i<N; i++){
                 arr[i] = Integer.parseInt(st.nextToken());
             }
+            Arrays.sort(arr);
             int answer = 0;
             for(int bit=0; bit<(1 << N); bit++){
                 int sum = 0;
