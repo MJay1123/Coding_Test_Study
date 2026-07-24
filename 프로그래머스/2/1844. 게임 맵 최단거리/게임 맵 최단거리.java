@@ -11,11 +11,12 @@ class Solution {
         MAP = new int[R][C];
         VISITED = new boolean[R][C];
         BFS(0, 0, maps);
-        int answer = MAP[R-1][C-1] > 0 ? MAP[R-1][C-1] + 1 : -1;
+        int answer = MAP[R-1][C-1] > 0 ? MAP[R-1][C-1] : -1;
         return answer;
     }
     
     public static void BFS(int startR, int startC, int[][] maps) {
+        MAP[startR][startC] = 1;
         Queue<Integer> rQueue = new LinkedList<>();
         Queue<Integer> cQueue = new LinkedList<>();
         rQueue.offer(startR);
