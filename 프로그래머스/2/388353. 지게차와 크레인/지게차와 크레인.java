@@ -1,80 +1,69 @@
 import java.util.*;
 class Solution {
-    static int move[][] = {{1,0},{0,1},{-1,0},{0,-1}};
+    static int around[][] = {{1,0},{0,1},{-1,0},{0,-1}};
+    static char[][] map;
+    static int answer;
+    static int R, C;
+    static char empty = 'a' - 'a';
     public int solution(String[] storage, String[] requests) {
-        String[][] map = new String[storage.length+2][storage[0].length()+2];
-        for(int r=1; r<map.length-1; r++){
-            String str = storage[r-1];
-            for(int c=1; c<map[0].length-1; c++){
-                map[r][c] = str.charAt(c-1) + "";
+        R = storage.length + 2;
+        C = storage[0].length() + 2;
+        map = new char[R][C];
+        for(int r=0; r<storage.length; r++){
+            String str = storage[r];
+            for(int c=0; c<str.length(); c++){
+                map[r+1][c+1] = str.charAt(c);
             }
         }
-        // 문제 풀이
-        for(String request : requests){
-            if(request.length() == 1){      // bfs
-                boolean[][] visited = new boolean[map.length][map[0].length];
-                bfs(new Location(0,0), request, map, visited);
-            } else {                        // pickAll
-                pickAll(request.substring(0,1), map);
-            }
-        }
-        int answer = 0;
-        for(int r=0; r<map.length; r++){
-            for(int c=0; c<map[0].length; c++){
-                if(map[r][c] != null){
-                    answer++;
-                }
+        answer = (R-2) * (C-2);
+        for(int i=0; i<requests.length; i++){
+            if(requests[i].length() == 1){
+                jigaechar(requests[i].charAt(0));
+            } else {
+                crane(requests[i].charAt(0));
             }
         }
         return answer;
     }
-    
-    public void pickAll(String target, String[][] map){           // 크레인으로 모든 컨테이너 회수
-        for(int r=1; r<map.length-1; r++){
-            for(int c=1; c<map[0].length-1; c++){
-                if(map[r][c] != null && map[r][c].equals(target)){
-                    map[r][c] = null;
-                }
-            }
-        }
+    public static boolean checkRange(int r, int c){
+        return r >= 0 && r < R && c >= 0 && c < C;
     }
-
-    public void bfs(Location loc, String target, String[][] map, boolean[][] visited){
-        Queue<Location> queue = new LinkedList<>();
-        int r = loc.r;
-        int c = loc.c;
-        queue.offer(loc);
-        visited[r][c] = true;
-        while(!queue.isEmpty()){
-            loc = queue.poll();
-            r = loc.r;
-            c = loc.c;
+    
+    public static void jigaechar(char container){
+        Queue<Integer> rQueue = new LinkedList<>();
+        Queue<Integer> cQueue = new LinkedList<>();
+        boolean[][] visited = new boolean[R][C];
+        rQueue.offer(0);
+        cQueue.offer(0);
+        visited[0][0] = true;
+        while(!rQueue.isEmpty()){
+            int r = rQueue.poll();
+            int c = cQueue.poll();
             for(int i=0; i<4; i++){
-                int nr = r + move[i][0];
-                int nc = c + move[i][1];
-                if(checkRange(nr, nc, map) && !visited[nr][nc]){
-                    if(map[nr][nc] == null){                    // null이면 bfs 계속 진행
-                        queue.offer(new Location(nr, nc));
+                int nr = r + around[i][0];
+                int nc = c + around[i][1];
+                if(checkRange(nr, nc) && !visited[nr][nc]){
+                    if(map[nr][nc] == empty){
+                        rQueue.offer(nr);
+                        cQueue.offer(nc);
                         visited[nr][nc] = true;
-                    } else if(map[nr][nc].equals(target)){      // target이면 컨테이너 회수 후에 더 못 들어감
-                        map[nr][nc] = null;
+                    } else if(map[nr][nc] == container){
+                        map[nr][nc] = empty;
+                        answer--;
                         visited[nr][nc] = true;
                     }
                 }
             }
         }
     }
-    
-    public boolean checkRange(int r, int c, String[][] map){
-        return r >= 0 && r < map.length && c >= 0 && c < map[0].length;
-    }
-    
-    static class Location {
-        int r;
-        int c;
-        public Location(int r, int c){
-            this.r = r;
-            this.c = c;
+    public static void crane(char container){
+        for(int r=0; r<map.length; r++){
+            for(int c=0; c<map[0].length; c++){
+                if(map[r][c] == container){
+                    map[r][c] = empty;
+                    answer--;
+                }
+            }
         }
     }
 }
