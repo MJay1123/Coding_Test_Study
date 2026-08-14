@@ -4,6 +4,9 @@ import java.io.*;
 public class Solution {
     static int N, A;
     static int TEMP = 20171109;
+    static PriorityQueue<Integer> sq = new PriorityQueue<>(Collections.reverseOrder());
+    static PriorityQueue<Integer> lq = new PriorityQueue<>();
+    static int middle;
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
@@ -14,35 +17,37 @@ public class Solution {
             StringTokenizer st = new StringTokenizer(br.readLine());
             N = Integer.parseInt(st.nextToken());
             A = Integer.parseInt(st.nextToken());
-            PriorityQueue<Integer> smallQueue = new PriorityQueue<>(Collections.reverseOrder());
-            PriorityQueue<Integer> largeQueue = new PriorityQueue<>();
-            int middle = A;
+            sq.clear();
+            lq.clear();
+            middle = A;
             for(int i=0; i<N; i++){
                 st = new StringTokenizer(br.readLine());
                 int num = Integer.parseInt(st.nextToken());
-                if(num < middle){
-                    smallQueue.offer(num);
-                } else {
-                    largeQueue.offer(num);
-                }
+                write(num);
                 num = Integer.parseInt(st.nextToken());
-                if(num < middle){
-                    smallQueue.offer(num);
-                } else {
-                    largeQueue.offer(num);
-                }
-                if(smallQueue.size() > largeQueue.size()){
-                    largeQueue.offer(middle);
-                    middle = smallQueue.poll();
-                } else if(smallQueue.size() < largeQueue.size()){
-                    smallQueue.offer(middle);
-                    middle = largeQueue.poll();
-                }
+                write(num);
+                sort();
                 answer = (answer + middle) % TEMP;   
             }
             sb.append("#").append(tc).append(" ").append(answer).append("\n");
         }
         bw.write(sb.toString());
         bw.flush();
+    }
+    public static void write(int num){
+        if(num < middle){
+            sq.offer(num);
+        } else {
+            lq.offer(num);
+        }
+    }
+    public static void sort(){
+        if(sq.size() > lq.size()){
+            lq.offer(middle);
+            middle = sq.poll();
+        } else if(sq.size() < lq.size()){
+            sq.offer(middle);
+            middle = lq.poll();
+        }
     }
 }
