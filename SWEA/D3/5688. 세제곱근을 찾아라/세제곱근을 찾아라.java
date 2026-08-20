@@ -11,15 +11,12 @@ public class Solution {
             N = Long.parseLong(br.readLine());
             long answer = -1;
             long low = 1;
-            long high = 1000000;
-            while(low <= high){
+            long high = 1000000 + 1;
+            while(low < high){
                 long middle = (low + high) / 2;
                 long result = middle * middle * middle;
                 if(result == N){
                     answer = middle;
-                    break;
-                }
-                if(low == high){
                     break;
                 }
                 if(result > N){
