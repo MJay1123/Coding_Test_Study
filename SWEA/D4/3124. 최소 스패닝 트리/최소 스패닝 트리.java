@@ -1,78 +1,83 @@
 import java.util.*;
 import java.io.*;
-
-public class Solution {
-	static int V, E;
-	static int[] arr;
-	static class Connection {
-		int num1;
-		int num2;
-		int weight;
-		public Connection(int num1, int num2, int weight) {
-			this.num1 = num1;
-			this.num2 = num2;
-			this.weight = weight;
-		}
-	}
-	public static void main(String[] args) throws IOException {
+class Solution {
+    static int V, E;
+    static int[] parents;
+	public static void main(String args[]) throws Exception	{
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
-		StringBuilder sb = new StringBuilder();
+        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+        StringBuilder sb = new StringBuilder();
 		int T = Integer.parseInt(br.readLine());
-		for(int testCase=1; testCase<=T; testCase++) {
-			StringTokenizer st = new StringTokenizer(br.readLine());
-			V = Integer.parseInt(st.nextToken());
-			E = Integer.parseInt(st.nextToken());
-			arr = new int[V+1];
-			for(int i=1; i<=V; i++) {
-				arr[i] = i;
-			}
-			PriorityQueue<Connection> pq = new PriorityQueue<>(new Comparator<Connection>() {
-				@Override
-				public int compare(Connection c1, Connection c2) {
-					return c1.weight - c2.weight;
-				}
-			});
-			for(int i=0; i<E; i++) {
-				st = new StringTokenizer(br.readLine());
-				int A = Integer.parseInt(st.nextToken());
-				int B = Integer.parseInt(st.nextToken());
-				int C = Integer.parseInt(st.nextToken());
-				pq.offer(new Connection(A, B, C));
-			}
-			int count = 0;
-			long weight = 0;
-			while(!pq.isEmpty()) {
-				if(count == V-1) {
-					break;
-				}
-				Connection c = pq.poll();
-				if(union(c.num1, c.num2)) {
-					count++;
-					weight += c.weight;
-				}
-			}
-			sb.append("#").append(testCase).append(" ").append(weight).append("\n");
-		}
-		bw.write(sb.toString());
-		bw.flush();
+		for(int tc=1; tc<=T; tc++){
+            sb.append("#").append(tc).append(" ");
+            StringTokenizer st = new StringTokenizer(br.readLine());
+            V = Integer.parseInt(st.nextToken());
+            E = Integer.parseInt(st.nextToken());
+            parents = new int[V+1];
+            for(int i=1; i<=V; i++){
+                parents[i] = -1;
+            }
+            PriorityQueue<Edge> pq = new PriorityQueue<>();
+            for(int i=0; i<E; i++){
+                st = new StringTokenizer(br.readLine());
+                int A = Integer.parseInt(st.nextToken());
+                int B = Integer.parseInt(st.nextToken());
+                int C = Integer.parseInt(st.nextToken());
+				pq.offer(new Edge(A, B, C));
+            }
+            long answer = 0;
+            int count = 0;
+            while(!pq.isEmpty()){
+                if(count == E-1){
+                    break;
+                }
+                Edge e = pq.poll();
+                int n1 = e.num1;
+                int n2 = e.num2;
+                if(union(n1, n2)){
+                    answer += e.weight;
+                    count++;
+                }
+            }
+            sb.append(answer).append("\n");
+        }
+        bw.write(sb.toString());
+        bw.flush();
 	}
-	public static boolean union(int num1, int num2) {
-		if(getRoot(num1) != getRoot(num2)) {
-			arr[getRoot(num1)] = getRoot(num2);
-			return true;
-		}
-		return false;
-	}
-	public static int getRoot(int num) {
-		List<Integer> list = new ArrayList<>();
-		while(arr[num] != num) {
-			list.add(num);
-			num = arr[num];
-		}
-		for(int i : list) {
-			arr[i] = num;
-		}
-		return num;
-	}
+    public static boolean union(int n1, int n2){
+        int p1 = find(n1);
+        int p2 = find(n2);
+        if(p1 != p2){
+            if(parents[p1] > parents[p2]){
+                parents[p1] = p2;
+            } else if(parents[p1] < parents[p2]) {
+                parents[p2] = p1;
+            } else {
+                parents[p1] = p2;
+                parents[p2]--;
+            }
+            return true;
+        }
+        return false;
+    }
+    public static int find(int n){
+        if(parents[n] > 0){
+            return find(parents[n]);
+        }
+        return n;
+    }
+    static class Edge implements Comparable<Edge> {
+        int num1;
+        int num2;
+        int weight;
+        public Edge(int num1, int num2, int weight){
+            this.num1 = num1;
+            this.num2 = num2;
+            this.weight = weight;
+        }
+        @Override
+        public int compareTo(Edge e){
+            return this.weight - e.weight;
+        }
+    }
 }
