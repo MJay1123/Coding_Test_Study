@@ -14,7 +14,7 @@ class Solution {
             }
         }
         Arrays.fill(map[0][0], 0);
-        DFS(0, 0, -1, 0, board);
+        dijkstra(0, 0, -1, 0, board);
         for(int i=0; i<4; i++){
             answer = Math.min(answer, map[R-1][C-1][i]);
         }
@@ -23,7 +23,7 @@ class Solution {
     boolean checkRange(int r, int c){
         return r >= 0 && r < R && c >= 0 && c < C;
     }
-    public void DFS(int r, int c, int direction, int cost, int[][] board){
+    public void dijkstra(int r, int c, int direction, int cost, int[][] board){
         for(int i=0; i<4; i++){
             int nr = r + around[i][0];
             int nc = c + around[i][1];
@@ -34,7 +34,7 @@ class Solution {
                 }
                 if(map[nr][nc][i] == 0 || map[nr][nc][i] >= newCost){
                     map[nr][nc][i] = newCost;
-                    DFS(nr, nc, i, newCost, board);
+                    dijkstra(nr, nc, i, newCost, board);
                 }
             }
         }
