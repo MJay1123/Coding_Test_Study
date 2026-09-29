@@ -30,25 +30,18 @@ class Solution {
             distances[0][0] = 0;
             Queue<Integer> rQueue = new LinkedList<>();
             Queue<Integer> cQueue = new LinkedList<>();
-            Queue<Integer> dQueue = new LinkedList<>();
             rQueue.offer(0);
             cQueue.offer(0);
-            dQueue.offer(0);
             while(!rQueue.isEmpty()){
                 int cr = rQueue.poll();
                 int cc = cQueue.poll();
-                int cd = dQueue.poll();
                 for(int i=0; i<4; i++){
                     int nr = cr + around[i][0];
                     int nc = cc + around[i][1];
-                    if(checkRange(nr, nc)){
-                        int nd = cd + map[nr][nc];
-                        if(distances[nr][nc] > nd){
-                            distances[nr][nc] = nd;
-                            rQueue.offer(nr);
-                            cQueue.offer(nc);
-                            dQueue.offer(nd);
-                        }
+                    if(checkRange(nr, nc) && distances[nr][nc] > distances[cr][cc] + map[nr][nc]){
+                        distances[nr][nc] = distances[cr][cc] + map[nr][nc];
+                        rQueue.offer(nr);
+                        cQueue.offer(nc);
                     }
                 }
             }
