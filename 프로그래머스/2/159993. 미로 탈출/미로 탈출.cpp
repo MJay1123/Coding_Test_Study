@@ -12,14 +12,13 @@ vector<vector<int>> around = {{1,0},{0,1},{-1,0},{0,-1}};
 bool checkRange(int r, int c){
     return r >= 0 && r < R && c >= 0 && c < C;
 }
-int BFS(int start_r, int start_c, char goal){
-    cout << "bfs start" << endl;
+int BFS(int sr, int sc, char goal){
     queue<int> r_queue;
     queue<int> c_queue;
     queue<int> d_queue;
     vector<vector<bool>> visited(R, vector<bool>(C, false));
-    r_queue.push(start_r);
-    c_queue.push(start_c);
+    r_queue.push(sr);
+    c_queue.push(sc);
     d_queue.push(0);
     while(!r_queue.empty()){
         int r = r_queue.front();
@@ -28,7 +27,6 @@ int BFS(int start_r, int start_c, char goal){
         c_queue.pop();
         int d = d_queue.front();
         d_queue.pop();
-        cout << r << " " << c << " " << d << " " << endl;
         if(map[r][c] == goal){
             return d;
         }
