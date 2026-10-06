@@ -18,9 +18,12 @@ class Solution {
     int[] distances;
     public int solution(int n, int s, int a, int b, int[][] fares) {
         init(n, s, a, b, fares);
+        int[] distS = dijkstra(S);
+        int[] distA = dijkstra(A);
+        int[] distB = dijkstra(B);
         int answer = MAX * 3;
         for(int i=1; i<=N; i++){
-            int result = Math.min(answer, dijkstra(i));
+            int result = distS[i] + distA[i] + distB[i];
             answer = Math.min(answer, result);
         }
         return answer;
@@ -43,7 +46,7 @@ class Solution {
             connections[d].add(new int[]{c,f});
         }
     }
-    public int dijkstra(int start){
+    public int[] dijkstra(int start){
         PriorityQueue<Connection> pq = new PriorityQueue<>();
         distances = new int[N+1];
         Arrays.fill(distances, MAX);
@@ -56,7 +59,7 @@ class Solution {
             int cd = cc.distance;
             visited[cn] = true;
             if(visited[S] && visited[A] && visited[B]){
-                return distances[S] + distances[A] + distances[B];
+                return distances;
             }
             for(int[] arr : connections[cn]){
                 int nn = arr[0];
@@ -70,6 +73,6 @@ class Solution {
                 }
             }
         }
-        return distances[S] + distances[A] + distances[B];
+        return distances;
     }
 }
