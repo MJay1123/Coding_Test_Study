@@ -16,12 +16,7 @@ class Solution {
 				arr[i] = Integer.parseInt(st.nextToken());
 			}
 			Arrays.sort(arr);
-			int answer = 0;
-			if(P % 2 == 0) {
-				answer = arr[0] * arr[P-1];
-			} else {
-				answer = arr[P/2] * arr[P/2];
-			}
+			int answer = arr[0] * arr[P-1];
             sb.append(answer).append("\n");
 		}
 		bw.write(sb.toString());
