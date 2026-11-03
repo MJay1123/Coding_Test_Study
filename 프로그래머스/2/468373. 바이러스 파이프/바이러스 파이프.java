@@ -13,23 +13,12 @@ class Solution {
     static int[] counts;
     static boolean[] infected;
     static List<int[]> list = new ArrayList<>();
-    public static void combination(int depth, int[] result, int k){
-        if(depth == k){
-            int[] arr = new int[k];
-            for(int i=0; i<k; i++){
-                arr[i] = result[i];
-            }
-            list.add(arr);
-            return;
-        }
-        result[depth] = 1;
-        combination(depth+1, result, k);
-        result[depth] = 2;
-        combination(depth+1, result, k);
-        result[depth] = 3;
-        combination(depth+1, result, k);
-    }
+    static int answer;
+    static int N, INF, K;
     public int solution(int n, int infection, int[][] edges, int k) {
+        N = n;
+        INF = infection;
+        K = k;
         pipes = new List[n+1];
         for(int i=1; i<=n; i++){
             pipes[i] = new ArrayList<>();
@@ -41,42 +30,55 @@ class Solution {
             pipes[n1].add(new Pipe(n2, pipe));
             pipes[n2].add(new Pipe(n1, pipe));
         }
-        int answer = 0;
-        combination(0, new int[k], k);
-        for(int[] sequence : list){
-            init(n, infection);
-            Queue<Integer> queue = new LinkedList<>();
-            for(int i=0; i<k; i++){
-                int opened = sequence[i];
-                for(int j=1; j<=n; j++){
-                    if(infected[j]){
-                        queue.add(j);
-                    }
-                    while(!queue.isEmpty()){
-                        int inf = queue.poll();
-                        for(Pipe pipe : pipes[inf]){
-                            if(pipe.pipe == opened){
-                                if(union(inf, pipe.num)){
-                                    queue.offer(pipe.num);
-                                }
+        answer = 0;
+        combination(0, new int[k]);
+
+        return answer;
+    }
+    public static void init(){
+        parents = new int[N+1];
+        counts = new int[N+1];
+        for(int i=1; i<=N; i++){
+            parents[i] = i;
+            counts[i] = 1;
+        }
+        infected = new boolean[N+1];
+        infected[INF] = true;
+    }
+    public static void combination(int depth, int[] result){
+        if(depth == K){
+            openPipe(result);
+            return;
+        }
+        result[depth] = 1;
+        combination(depth+1, result);
+        result[depth] = 2;
+        combination(depth+1, result);
+        result[depth] = 3;
+        combination(depth+1, result);
+    }
+    public static void openPipe(int[] result){
+        init();
+        Queue<Integer> queue = new LinkedList<>();
+        for(int i=0; i<K; i++){
+            int opened = result[i];
+            for(int j=1; j<=N; j++){
+                if(infected[j]){
+                    queue.add(j);
+                }
+                while(!queue.isEmpty()){
+                    int inf = queue.poll();
+                    for(Pipe pipe : pipes[inf]){
+                        if(pipe.pipe == opened){
+                            if(union(inf, pipe.num)){
+                                queue.offer(pipe.num);
                             }
                         }
                     }
                 }
             }
-            answer = Math.max(answer, counts[infection]);
+            answer = Math.max(answer, counts[INF]);
         }
-        return answer;
-    }
-    public static void init(int n, int infection){
-        parents = new int[n+1];
-        counts = new int[n+1];
-        for(int i=1; i<=n; i++){
-            parents[i] = i;
-            counts[i] = 1;
-        }
-        infected = new boolean[n+1];
-        infected[infection] = true;
     }
     public static boolean union(int n1, int n2){
         int p1 = find(n1);
