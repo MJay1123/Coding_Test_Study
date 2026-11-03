@@ -12,7 +12,6 @@ class Solution {
     static int[] parents;
     static int[] counts;
     static boolean[] infected;
-    static List<int[]> list = new ArrayList<>();
     static int answer;
     static int N, INF, K;
     public int solution(int n, int infection, int[][] edges, int k) {
