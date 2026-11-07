@@ -1,18 +1,40 @@
-WITH CODES AS (SELECT
-               SUM(`CODE`) AS CODE_SUM,
-               CATEGORY
-               FROM SKILLCODES
-               GROUP BY CATEGORY)
+WITH GRADE_TABLE AS (
 SELECT
     CASE
-        WHEN SKILL_CODE & (SELECT CODE_SUM FROM CODES WHERE CATEGORY = 'Front End')
-        AND SKILL_CODE & (SELECT CODE FROM SKILLCODES WHERE NAME = 'Python') > 0 THEN 'A'
-        WHEN SKILL_CODE & (SELECT CODE FROM SKILLCODES WHERE NAME = 'C#') > 0 THEN 'B'
-        WHEN SKILL_CODE & (SELECT CODE_SUM FROM CODES WHERE CATEGORY = 'Front End') THEN 'C'
+        WHEN SKILL_CODE & (
+                SELECT
+                    SUM(CODE)
+                FROM SKILLCODES
+                WHERE CATEGORY = 'Front End'
+            ) > 0
+        AND SKILL_CODE & (
+                SELECT
+                    CODE
+                FROM SKILLCODES
+                WHERE NAME = 'Python'
+            ) > 0 THEN 'A'
+        WHEN SKILL_CODE & (
+                SELECT
+                    CODE
+                FROM SKILLCODES
+                WHERE NAME = 'C#'
+            ) > 0 THEN 'B'
+        WHEN SKILL_CODE & (
+                SELECT
+                    SUM(CODE)
+                FROM SKILLCODES
+                WHERE CATEGORY = 'Front End'
+            ) > 0 THEN 'C'
     END AS GRADE,
     ID,
     EMAIL
 FROM DEVELOPERS
-WHERE SKILL_CODE & ((SELECT CODE_SUM FROM CODES WHERE CATEGORY = 'Front End') 
-                    + (SELECT CODE FROM SKILLCODES WHERE NAME = 'C#')) > 0
+)
+SELECT
+    GRADE,
+    ID,
+    EMAIL
+FROM GRADE_TABLE
+WHERE GRADE IS NOT NULL
 ORDER BY GRADE ASC, ID ASC
+;
