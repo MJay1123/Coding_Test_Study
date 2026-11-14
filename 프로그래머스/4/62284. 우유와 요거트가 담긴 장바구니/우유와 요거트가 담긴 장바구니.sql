@@ -1,12 +1,16 @@
 SELECT
-    CART_ID
+    DISTINCT MILK_CARTS.CART_ID
 FROM (
-        SELECT DISTINCT
-            CART_ID,
-            NAME
+        SELECT
+            CART_ID
         FROM CART_PRODUCTS
-        WHERE NAME IN ('Milk', 'Yogurt')
-    ) as A
-GROUP BY CART_ID
-HAVING COUNT(NAME) = 2
-ORDER BY CART_ID;
+        WHERE NAME = 'Milk'
+    ) AS MILK_CARTS
+JOIN (
+        SELECT
+            CART_ID
+        FROM CART_PRODUCTS
+        WHERE NAME = 'Yogurt'
+    ) AS YOGURT_CARTS ON MILK_CARTS.CART_ID = YOGURT_CARTS.CART_ID
+ORDER BY CART_ID ASC
+;
